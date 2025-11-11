@@ -9,32 +9,61 @@ import AdminCoursesPage from '@/pages/admin/AdminCoursesPage';
 import AdminCourseDetailsPage from '@/pages/admin/AdminCourseDetailsPage';
 import AdminSettingsPage from '@/pages/admin/AdminSettingsPage';
 import AdminModuleDetailsPage from '@/pages/admin/AdminModuleDetailsPage';
+import UserCoursesPage from '@/pages/user/UserCoursesPage';
+import UserCourseDetailsPage from '@/pages/user/UserCoursedetailsPage';
+import ExamPage from '@/pages/user/ExamPage';
+import UserHistoryPage from '@/pages/user/UserHistoryPage';
+import MyCoursesPage from '@/pages/user/MyCoursesPage';
+import AttemptReviewPage from '@/pages/user/AttemptReviewPage';
+import UserProfilePage from '@/pages/user/UserProfilePage';
+import AdminStudentsPage from '@/pages/admin/AdminStudentsPage';
+import AdminStudentDetailsPage from '@/pages/admin/AdminStudentDetailsPage';
+import AdminReportsPage from '@/pages/admin/AdminReportsPage'; // Fixed: Capital P
+import AdminUserFormPage from '@/pages/admin/AdminUserFormPage';
+import AdminQuestionsPage from '@/pages/admin/AdminQuestionsPage';
+import AdminQuestionFormPage from '@/pages/admin/AdminQuestionFormPage';
 
 function App() {
-  const dispatch = useDispatch();
+    const dispatch = useDispatch();
 
-  useEffect(() => {
-    dispatch(checkAuth());
-  }, [dispatch]);
+    useEffect(() => {
+        dispatch(checkAuth());
+    }, [dispatch]);
 
-  return (
-    <BrowserRouter>
-      <Routes>
-        <Route path="/" element={<Navigate to="/login" replace />} />
-        <Route path="/login" element={<LoginPage />} />
-        <Route path="/signup" element={<SignupPage />} />
-        <Route path="/admin" element={<AdminDashboardPage />} />
-        <Route path="/admin/courses" element={<AdminCoursesPage />} />
-        <Route path="/admin/courses/:id" element={<AdminCourseDetailsPage />} />
-        <Route path="/admin/questions" element={<div className="p-8">Questions Management (Coming Soon)</div>} />
-        <Route path="/admin/reports" element={<div className="p-8">Reports (Coming Soon)</div>} />
-        <Route path="/admin/users" element={<div className="p-8">Users Management (Coming Soon)</div>} />
-        <Route path="/admin/settings" element={<AdminSettingsPage />} />
-        <Route path="/admin/courses/:courseId/modules/:moduleId" element={<AdminModuleDetailsPage />} />
-        <Route path="/user" element={<div className="p-8">User Dashboard (Coming Soon)</div>} />
-      </Routes>
-    </BrowserRouter>
-  );
+    return (
+        <BrowserRouter>
+            <Routes>
+                <Route path="/" element={<Navigate to="/login" replace />} />
+                <Route path="/login" element={<LoginPage />} />
+                <Route path="/signup" element={<SignupPage />} />
+
+                {/* Admin Routes */}
+                <Route path="/admin" element={<AdminDashboardPage />} />
+                <Route path="/admin/courses" element={<AdminCoursesPage />} />
+                <Route path="/admin/courses/:id" element={<AdminCourseDetailsPage />} />
+                <Route path="/admin/courses/:courseId/modules/:moduleId" element={<AdminModuleDetailsPage />} />
+                <Route path="/admin/questions" element={<AdminQuestionsPage />} />
+                <Route path="/admin/questions/create" element={<AdminQuestionFormPage />} />
+                <Route path="/admin/questions/edit/:id" element={<AdminQuestionFormPage />} />
+                <Route path="/admin/users" element={<AdminStudentsPage />} />
+                <Route path="/admin/users/create" element={<AdminUserFormPage />} />
+                <Route path="/admin/users/:id" element={<AdminStudentDetailsPage />} />
+                <Route path="/admin/reports" element={<AdminReportsPage />} /> {/* Fixed: Now uses component */}
+                <Route path="/admin/settings" element={<AdminSettingsPage />} />
+
+                {/* User Routes */}
+                <Route path="/user" element={<Navigate to="/user/courses" replace />} />
+                <Route path="/admin/user/create" element={<AdminUserFormPage />} />
+                <Route path="/user/courses" element={<UserCoursesPage />} />
+                <Route path="/user/courses/:id" element={<UserCourseDetailsPage />} />
+                <Route path="/user/exam/:id" element={<ExamPage />} />
+                <Route path="/user/history" element={<UserHistoryPage />} />
+                <Route path="/user/my-courses" element={<MyCoursesPage />} />
+                <Route path="/user/attempt/:attemptId" element={<AttemptReviewPage />} />
+                <Route path="/user/profile" element={<UserProfilePage />} />
+            </Routes>
+        </BrowserRouter>
+    );
 }
 
 export default App;

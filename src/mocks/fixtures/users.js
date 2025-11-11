@@ -1,0 +1,32 @@
+export const mockUsers = [
+  {
+    id: 1,
+    name: 'Admin User',
+    email: 'admin@test.com',
+    password: 'admin123',
+    role: 'admin',
+    phone: '+91 9876543210',
+    bio: 'System Administrator',
+    createdAt: '2024-01-01T00:00:00.000Z',
+  },
+  {
+    id: 2,
+    name: 'John Doe',
+    email: 'john@test.com',
+    password: 'test123',
+    role: 'user',
+    phone: '+91 9876543211',
+    bio: 'Computer Science Student',
+    createdAt: '2024-01-15T00:00:00.000Z',
+  },
+  {
+    id: 3,
+    name: 'Jane Smith',
+    email: 'jane@test.com',
+    password: 'test123',
+    role: 'user',
+    phone: '+91 9876543212',
+    bio: 'Engineering Student',
+    createdAt: '2024-02-01T00:00:00.000Z',
+  },
+];
