@@ -1,0 +1,36 @@
+export const mockQuestions = [
+  {
+    id: 1,
+    moduleId: 1,
+    type: 'mcq',
+    question: 'What is JSX?',
+    options: [
+      'JavaScript XML',
+      'Java Syntax Extension',
+      'JavaScript Extension',
+      'None of the above',
+    ],
+    correctAnswer: 0,
+    points: 2,
+    difficulty: 'easy',
+  },
+  {
+    id: 2,
+    moduleId: 1,
+    type: 'subjective',
+    question: 'Explain the virtual DOM and its benefits in React.',
+    points: 5,
+    difficulty: 'medium',
+    maxWords: 150,
+  },
+  {
+    id: 3,
+    moduleId: 2,
+    type: 'coding',
+    question: 'Write a custom React hook called useCounter that manages a counter state',
+    starterCode: 'function useCounter(initialValue = 0) {\n  // Your code here\n}',
+    points: 10,
+    difficulty: 'medium',
+    language: 'javascript',
+  },
+];
