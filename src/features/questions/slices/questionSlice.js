@@ -26,9 +26,14 @@ const questionSlice = createSlice({
     setSelectedQuestion: (state, action) => {
       state.selectedQuestion = action.payload;
     },
+    bulkDeleteQuestions: (state, action) => {
+      const idsToDelete = action.payload;
+      state.questions = state.questions.filter((question) => !idsToDelete.includes(question.id));
+    },
+
   },
 });
 
-export const { addQuestion, updateQuestion, deleteQuestion, setSelectedQuestion } =
+export const { addQuestion, updateQuestion, deleteQuestion, setSelectedQuestion, bulkDeleteQuestions } =
   questionSlice.actions;
 export default questionSlice.reducer;

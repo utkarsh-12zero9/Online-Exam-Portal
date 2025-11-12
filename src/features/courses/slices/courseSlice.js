@@ -40,6 +40,10 @@ const courseSlice = createSlice({
         course.isActive = !course.isActive;
       }
     },
+    bulkDeleteCourses: (state, action) => {
+      const idsToDelete = action.payload;
+      state.courses = state.courses.filter((course) => !idsToDelete.includes(course.id));
+    },
   },
 });
 
@@ -49,6 +53,7 @@ export const {
   deleteCourse,
   setSelectedCourse,
   toggleCourseStatus,
+  bulkDeleteCourses,
 } = courseSlice.actions;
 
 export default courseSlice.reducer;

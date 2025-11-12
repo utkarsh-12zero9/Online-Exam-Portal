@@ -7,6 +7,7 @@ import Card from '@/shared/components/ui/Card';
 import Input from '@/shared/components/ui/Input';
 import Button from '@/shared/components/ui/Button';
 
+
 const AdminSettingsPage = () => {
   const { user } = useSelector((state) => state.auth);
   const dispatch = useDispatch();
@@ -88,6 +89,7 @@ const AdminSettingsPage = () => {
       setLoading(false);
     }, 1000);
   };
+
 
   return (
     <AdminLayout>

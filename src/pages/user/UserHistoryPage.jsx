@@ -67,7 +67,6 @@ const UserHistoryPage = () => {
                 {sortedAttempts.length > 0 ? (
                     <div className="grid grid-cols-1 gap-4">
                         {sortedAttempts.map((attempt, idx) => {
-                            // Safe calculation with fallback
                             const totalMarks = attempt.totalMarks || (attempt.totalQuestions * 1) || 1;
                             const score = attempt.score || 0;
                             const percentage = totalMarks > 0
@@ -79,7 +78,7 @@ const UserHistoryPage = () => {
                                     <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-4">
                                         {/* Course Info */}
                                         <div className="flex-1">
-                                            <div className="flex items-start gap-3 mb-2">
+                                            <div className="flex items-start gap-3 mb-2 flex-wrap">
                                                 <h2 className="text-xl font-bold text-gray-900">
                                                     {attempt.course?.title || 'Unknown Course'}
                                                 </h2>
@@ -91,6 +90,20 @@ const UserHistoryPage = () => {
                                                 >
                                                     {attempt.status === 'completed' ? 'Completed' : 'In Progress'}
                                                 </span>
+
+                                                {/* Violation Badge */}
+                                                {attempt.violationCount > 0 && (
+                                                    <span className="px-2 py-1 bg-red-100 text-red-700 rounded-full text-xs font-semibold flex items-center gap-1">
+                                                        ⚠️ {attempt.violationCount} Violation{attempt.violationCount > 1 ? 's' : ''}
+                                                    </span>
+                                                )}
+
+                                                {/* Auto-submitted Badge */}
+                                                {attempt.autoSubmitted && (
+                                                    <span className="px-2 py-1 bg-orange-100 text-orange-700 rounded-full text-xs font-semibold">
+                                                        Auto-Submitted
+                                                    </span>
+                                                )}
                                             </div>
 
                                             <div className="grid grid-cols-2 sm:grid-cols-3 gap-3 text-sm text-gray-600">
@@ -113,6 +126,37 @@ const UserHistoryPage = () => {
                                                     </p>
                                                 </div>
                                             </div>
+
+                                            {/* Violation Details */}
+                                            {attempt.violationCount > 0 && attempt.violations && (
+                                                <div className="mt-4 p-3 bg-red-50 border border-red-200 rounded-lg">
+                                                    <p className="text-xs font-semibold text-red-700 mb-2 flex items-center gap-2">
+                                                        <span>⚠️</span>
+                                                        <span>Proctoring Violations Detected:</span>
+                                                    </p>
+                                                    <div className="space-y-1">
+                                                        {attempt.violations.slice(0, 3).map((violation, vIdx) => (
+                                                            <div key={vIdx} className="text-xs text-red-600 flex items-start gap-2">
+                                                                <span className="mt-0.5">•</span>
+                                                                <span className="flex-1">{violation.description}</span>
+                                                                <span className="text-red-500 text-xs">
+                                                                    ({new Date(violation.timestamp).toLocaleTimeString()})
+                                                                </span>
+                                                            </div>
+                                                        ))}
+                                                        {attempt.violations.length > 3 && (
+                                                            <p className="text-xs text-red-500 italic pl-4">
+                                                                +{attempt.violations.length - 3} more violation{attempt.violations.length - 3 > 1 ? 's' : ''}
+                                                            </p>
+                                                        )}
+                                                    </div>
+                                                    {attempt.submissionReason && (
+                                                        <p className="text-xs text-red-600 mt-2 font-semibold">
+                                                            Reason: {attempt.submissionReason}
+                                                        </p>
+                                                    )}
+                                                </div>
+                                            )}
                                         </div>
 
                                         {/* Score Display */}
@@ -153,12 +197,13 @@ const UserHistoryPage = () => {
                                     <div className="mt-4">
                                         <div className="w-full bg-gray-200 rounded-full h-2">
                                             <div
-                                                className={`h-2 rounded-full transition-all ${percentage >= 80
+                                                className={`h-2 rounded-full transition-all ${
+                                                    percentage >= 80
                                                         ? 'bg-emerald-500'
                                                         : percentage >= 60
-                                                            ? 'bg-yellow-500'
-                                                            : 'bg-red-500'
-                                                    }`}
+                                                        ? 'bg-yellow-500'
+                                                        : 'bg-red-500'
+                                                }`}
                                                 style={{ width: `${Math.min(100, percentage)}%` }}
                                             />
                                         </div>

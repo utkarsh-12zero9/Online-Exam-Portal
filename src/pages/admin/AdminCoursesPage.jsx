@@ -1,277 +1,226 @@
 import React, { useState } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
-import {
-  addCourse,
-  updateCourse,
-  deleteCourse,
-  toggleCourseStatus,
-  setSelectedCourse,
-} from '@/features/courses/slices/courseSlice';
 import AdminLayout from '@/shared/components/layout/AdminLayout';
 import Card from '@/shared/components/ui/Card';
 import Button from '@/shared/components/ui/Button';
-import CourseForm from './CourseForm';
+import Input from '@/shared/components/ui/Input';
+import { deleteCourse, bulkDeleteCourses } from '@/features/courses/slices/courseSlice';
 import { toast } from 'react-toastify';
 
-const getStatusColor = (active) =>
-  active ? 'bg-emerald-100 text-emerald-800' : 'bg-gray-100 text-gray-600';
-
-function AdminCoursesPage() {
-  const { courses, selectedCourse } = useSelector((state) => state.courses);
-  const dispatch = useDispatch();
+const AdminCoursesPage = () => {
   const navigate = useNavigate();
-  
-  const [isModalOpen, setIsModalOpen] = useState(false);
-  const [editMode, setEditMode] = useState(false);
-  const [form, setForm] = useState({
-    title: '',
-    description: '',
-    domain: '',
-    difficulty: 'easy',
-    duration: 60,
-    price: 0,
-    tags: '',
-    attemptLimit: 1,
-    isActive: true,
+  const dispatch = useDispatch();
+  const courses = useSelector((state) => state.courses.courses);
+
+  const [searchTerm, setSearchTerm] = useState('');
+  const [filterDomain, setFilterDomain] = useState('all');
+  const [filterDifficulty, setFilterDifficulty] = useState('all');
+  const [selectedCourses, setSelectedCourses] = useState([]);
+
+  const filteredCourses = courses.filter((course) => {
+    const matchesSearch = course.title.toLowerCase().includes(searchTerm.toLowerCase());
+    const matchesDomain = filterDomain === 'all' || course.domain === filterDomain;
+    const matchesDifficulty = filterDifficulty === 'all' || course.difficulty === filterDifficulty;
+    return matchesSearch && matchesDomain && matchesDifficulty;
   });
 
-  // Open Add/Edit modal
-  const openModal = (course = null) => {
-    setEditMode(!!course);
-    setForm(
-      course
-        ? {
-            ...course,
-            tags: course.tags.join(', '),
-          }
-        : {
-            title: '',
-            description: '',
-            domain: '',
-            difficulty: 'easy',
-            duration: 60,
-            price: 0,
-            tags: '',
-            attemptLimit: 1,
-            isActive: true,
-          }
-    );
-    setIsModalOpen(true);
-    if (course) dispatch(setSelectedCourse(course));
-  };
-
-  // Close modal
-  const closeModal = () => {
-    setIsModalOpen(false);
-    setEditMode(false);
-    dispatch(setSelectedCourse(null));
-  };
-
-  const handleChange = (e) => {
-    let { name, value } = e.target;
-    if (name === 'price' || name === 'duration' || name === 'attemptLimit')
-      value = Number(value);
-    if (name === 'isActive') value = e.target.checked;
-    setForm((f) => ({
-      ...f,
-      [name]: value,
-    }));
-  };
-
-  // Save new or update
-  const handleSave = (e) => {
-    e.preventDefault();
-    const courseData = {
-      ...form,
-      tags: form.tags.split(',').map((t) => t.trim()),
-    };
-    if (editMode) {
-      dispatch(updateCourse({ ...selectedCourse, ...courseData }));
-      toast.success('Course updated!');
+  const handleSelectAll = (e) => {
+    if (e.target.checked) {
+      setSelectedCourses(filteredCourses.map((c) => c.id));
     } else {
-      dispatch(addCourse(courseData));
-      toast.success('Course added!');
+      setSelectedCourses([]);
     }
-    closeModal();
   };
 
-  // Delete
-  const handleDelete = (id) => {
-    dispatch(deleteCourse(id));
-    toast.error('Course deleted!');
-    closeModal();
+  const handleSelectOne = (courseId) => {
+    if (selectedCourses.includes(courseId)) {
+      setSelectedCourses(selectedCourses.filter((id) => id !== courseId));
+    } else {
+      setSelectedCourses([...selectedCourses, courseId]);
+    }
   };
 
-  // Toggle active/inactive
-  const handleToggleActive = (id) => {
-    dispatch(toggleCourseStatus(id));
-    toast.info('Course status changed!');
+  const handleBulkDelete = () => {
+    if (selectedCourses.length === 0) {
+      toast.warning('Please select courses to delete');
+      return;
+    }
+
+    const confirmMessage = `Are you sure you want to delete ${selectedCourses.length} course${
+      selectedCourses.length > 1 ? 's' : ''
+    }? This will also delete all associated modules and questions.`;
+
+    if (window.confirm(confirmMessage)) {
+      dispatch(bulkDeleteCourses(selectedCourses));
+      toast.success(`${selectedCourses.length} course${selectedCourses.length > 1 ? 's' : ''} deleted successfully`);
+      setSelectedCourses([]);
+    }
   };
+
+  const handleDeleteSingle = (id, title) => {
+    if (window.confirm(`Are you sure you want to delete "${title}"? This will also delete all associated modules and questions.`)) {
+      dispatch(deleteCourse(id));
+      toast.success('Course deleted successfully');
+      setSelectedCourses(selectedCourses.filter((courseId) => courseId !== id));
+    }
+  };
+
+  const allSelected = filteredCourses.length > 0 && selectedCourses.length === filteredCourses.length;
+  const someSelected = selectedCourses.length > 0 && !allSelected;
 
   return (
     <AdminLayout>
       <div>
-        <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between mb-4 gap-2">
-          <h1 className="text-2xl font-bold text-gray-900">Manage Courses</h1>
-          <Button
-            variant="secondary"
-            className="w-full sm:w-auto"
-            onClick={() => openModal()}
-          >
-            + Add New Course
+        <div className="flex items-center justify-between mb-6">
+          <div>
+            <h1 className="text-3xl font-bold text-gray-900 mb-2">Course Management</h1>
+            <p className="text-gray-600">Manage all courses and their modules</p>
+          </div>
+          <Button variant="primary" onClick={() => navigate('/admin/courses/create')}>
+            + Create Course
           </Button>
         </div>
 
-        {/* Table (Desktop/tablet) */}
-        <div className="hidden sm:block">
-          <Card className="p-0 overflow-x-auto">
-            <table className="w-full text-sm">
-              <thead>
-                <tr className="bg-blue-100 border-b">
-                  <th className="py-3 px-4 font-medium text-gray-600">Course</th>
-                  <th className="py-3 px-4 font-medium text-gray-600">Domain</th>
-                  <th className="py-3 px-4 font-medium text-gray-600">Difficulty</th>
-                  <th className="py-3 px-4 font-medium text-gray-600">Status</th>
-                  <th className="py-3 px-4 font-medium text-gray-600">Price</th>
-                  <th className="py-3 px-4 font-medium text-gray-600">Actions</th>
+        {/* Filters & Bulk Actions */}
+        <Card className="p-4 mb-6">
+          <div className="flex flex-col gap-3">
+            <div className="flex flex-col sm:flex-row gap-3">
+              <Input
+                placeholder="Search courses..."
+                value={searchTerm}
+                onChange={(e) => setSearchTerm(e.target.value)}
+                className="flex-1"
+              />
+              <select
+                value={filterDomain}
+                onChange={(e) => setFilterDomain(e.target.value)}
+                className="border border-gray-300 rounded-lg px-3 py-2"
+              >
+                <option value="all">All Domains</option>
+                <option value="Programming">Programming</option>
+                <option value="Design">Design</option>
+                <option value="Business">Business</option>
+              </select>
+              <select
+                value={filterDifficulty}
+                onChange={(e) => setFilterDifficulty(e.target.value)}
+                className="border border-gray-300 rounded-lg px-3 py-2"
+              >
+                <option value="all">All Difficulties</option>
+                <option value="easy">Easy</option>
+                <option value="medium">Medium</option>
+                <option value="hard">Hard</option>
+              </select>
+            </div>
+
+            <div className="flex items-center justify-between">
+              <span className="text-sm text-gray-600">
+                Showing {filteredCourses.length} of {courses.length} courses
+              </span>
+              {selectedCourses.length > 0 && (
+                <Button variant="danger" size="sm" onClick={handleBulkDelete}>
+                  Delete Selected ({selectedCourses.length})
+                </Button>
+              )}
+            </div>
+          </div>
+        </Card>
+
+        {/* Courses Table */}
+        <Card className="overflow-hidden">
+          <div className="overflow-x-auto">
+            <table className="w-full">
+              <thead className="bg-gray-50 border-b border-gray-200">
+                <tr>
+                  <th className="px-6 py-3 text-left">
+                    <input
+                      type="checkbox"
+                      checked={allSelected}
+                      ref={(input) => {
+                        if (input) input.indeterminate = someSelected;
+                      }}
+                      onChange={handleSelectAll}
+                      className="w-4 h-4 text-blue-600 border-gray-300 rounded focus:ring-blue-500"
+                    />
+                  </th>
+                  <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Course</th>
+                  <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Domain</th>
+                  <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Difficulty</th>
+                  <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Duration</th>
+                  <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Price</th>
+                  <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Actions</th>
                 </tr>
               </thead>
-              <tbody>
-                {courses.map((c) => (
-                  <tr key={c.id} className="border-b hover:bg-gray-50">
-                    <td className="py-3 px-4">
-                      <span className="font-semibold text-gray-900">{c.title}</span>
-                      <br />
-                      <span className="text-xs text-gray-500">{c.tags.join(', ')}</span>
-                    </td>
-                    <td className="py-3 px-4 text-gray-600">{c.domain}</td>
-                    <td className="py-3 px-4">
-                      <span
-                        className={`px-2 py-1 rounded text-xs font-semibold ${
-                          c.difficulty === 'easy'
-                            ? 'bg-emerald-100 text-emerald-800'
-                            : c.difficulty === 'medium'
-                            ? 'bg-yellow-100 text-yellow-700'
-                            : 'bg-red-100 text-red-700'
-                        }`}
-                      >
-                        {c.difficulty}
-                      </span>
-                    </td>
-                    <td className="py-3 px-4">
-                      <Button
-                        variant={c.isActive ? 'primary' : 'outline'}
-                        size="sm"
-                        className={getStatusColor(c.isActive)}
-                        onClick={() => handleToggleActive(c.id)}
-                      >
-                        {c.isActive ? 'Active' : 'Inactive'}
-                      </Button>
-                    </td>
-                    <td className="py-3 px-4">{c.price === 0 ? 'Free' : `₹${c.price}`}</td>
-                    <td className="py-3 px-4 flex gap-2">
-                      <Button
-                        variant="primary"
-                        size="sm"
-                        onClick={() => navigate(`/admin/courses/${c.id}`)}
-                      >
-                        Manage
-                      </Button>
-                      <Button
-                        variant="secondary"
-                        size="sm"
-                        onClick={() => openModal(c)}
-                      >
-                        Edit
-                      </Button>
-                      <Button
-                        variant="danger"
-                        size="sm"
-                        onClick={() => handleDelete(c.id)}
-                      >
-                        Delete
-                      </Button>
-                    </td>
-                  </tr>
-                ))}
-                {courses.length === 0 && (
+              <tbody className="bg-white divide-y divide-gray-200">
+                {filteredCourses.length > 0 ? (
+                  filteredCourses.map((course) => {
+                    const isSelected = selectedCourses.includes(course.id);
+                    return (
+                      <tr key={course.id} className={`hover:bg-gray-50 ${isSelected ? 'bg-blue-50' : ''}`}>
+                        <td className="px-6 py-4">
+                          <input
+                            type="checkbox"
+                            checked={isSelected}
+                            onChange={() => handleSelectOne(course.id)}
+                            className="w-4 h-4 text-blue-600 border-gray-300 rounded focus:ring-blue-500"
+                          />
+                        </td>
+                        <td className="px-6 py-4">
+                          <div className="text-sm font-medium text-gray-900">{course.title}</div>
+                          <div className="text-sm text-gray-500 line-clamp-1">{course.description}</div>
+                        </td>
+                        <td className="px-6 py-4">
+                          <span className="px-2 py-1 text-xs font-semibold rounded-full bg-blue-100 text-blue-800">
+                            {course.domain}
+                          </span>
+                        </td>
+                        <td className="px-6 py-4">
+                          <span
+                            className={`px-2 py-1 text-xs font-semibold rounded-full ${
+                              course.difficulty === 'easy'
+                                ? 'bg-emerald-100 text-emerald-800'
+                                : course.difficulty === 'medium'
+                                ? 'bg-yellow-100 text-yellow-800'
+                                : 'bg-red-100 text-red-800'
+                            }`}
+                          >
+                            {course.difficulty}
+                          </span>
+                        </td>
+                        <td className="px-6 py-4 text-sm text-gray-900">{course.duration} min</td>
+                        <td className="px-6 py-4 text-sm text-gray-900">₹{course.price}</td>
+                        <td className="px-6 py-4">
+                          <div className="flex gap-2">
+                            <Button variant="secondary" size="sm" onClick={() => navigate(`/admin/courses/${course.id}`)}>
+                              View
+                            </Button>
+                            <Button
+                              variant="danger"
+                              size="sm"
+                              onClick={() => handleDeleteSingle(course.id, course.title)}
+                            >
+                              Delete
+                            </Button>
+                          </div>
+                        </td>
+                      </tr>
+                    );
+                  })
+                ) : (
                   <tr>
-                    <td colSpan={6} className="text-center text-gray-400 py-8">
-                      No courses found.
+                    <td colSpan="7" className="px-6 py-12 text-center text-gray-500">
+                      No courses found
                     </td>
                   </tr>
                 )}
               </tbody>
             </table>
-          </Card>
-        </div>
-
-        {/* Mobile Card List */}
-        <div className="sm:hidden flex flex-col gap-4">
-          {courses.map((c) => (
-            <Card key={c.id} className="p-4">
-              <div className="flex justify-between items-center mb-2">
-                <h2 className="font-bold text-lg">{c.title}</h2>
-                <Button
-                  variant={c.isActive ? 'primary' : 'outline'}
-                  size="sm"
-                  className={getStatusColor(c.isActive)}
-                  onClick={() => handleToggleActive(c.id)}
-                >
-                  {c.isActive ? 'Active' : 'Inactive'}
-                </Button>
-              </div>
-              <p className="text-sm text-gray-600 mb-2">{c.description}</p>
-              <div className="flex gap-2 flex-wrap mb-2">
-                {c.tags.map((tag, i) => (
-                  <span
-                    key={tag + i}
-                    className="px-2 py-1 bg-gray-100 rounded text-xs text-gray-700"
-                  >
-                    {tag}
-                  </span>
-                ))}
-              </div>
-              <div className="flex gap-2">
-                <Button 
-                  variant="primary" 
-                  size="sm" 
-                  onClick={() => navigate(`/admin/courses/${c.id}`)}
-                >
-                  Manage
-                </Button>
-                <Button variant="secondary" size="sm" onClick={() => openModal(c)}>
-                  Edit
-                </Button>
-                <Button variant="danger" size="sm" onClick={() => handleDelete(c.id)}>
-                  Delete
-                </Button>
-              </div>
-            </Card>
-          ))}
-          {courses.length === 0 && (
-            <Card className="p-4 flex items-center justify-center">
-              <span className="text-gray-500">No courses found.</span>
-            </Card>
-          )}
-        </div>
-
-        {/* Add/Edit Modal */}
-        {isModalOpen && (
-          <CourseForm
-            form={form}
-            handleChange={handleChange}
-            handleSave={handleSave}
-            editMode={editMode}
-            handleDelete={editMode ? handleDelete : undefined}
-            closeModal={closeModal}
-            selectedCourse={selectedCourse}
-          />
-        )}
+          </div>
+        </Card>
       </div>
     </AdminLayout>
   );
-}
+};
 
 export default AdminCoursesPage;

@@ -4,6 +4,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import { loginStart, loginSuccess } from '@/features/auth/slices/authSlice';
 import { toast } from 'react-toastify';
 import Button from '@/shared/components/ui/Button';
+import { PiExam, PiExamDuotone } from 'react-icons/pi';
 
 const SignupPage = () => {
   const [formData, setFormData] = useState({
@@ -68,7 +69,7 @@ const SignupPage = () => {
         <div className="relative z-10">
           <div className="flex items-center gap-3 mb-16">
             <div className="w-12 h-12 bg-white rounded-xl flex items-center justify-center">
-              <span className="text-blue-500 font-bold text-2xl">E</span>
+              <span className="text-blue-500 font-bold text-2xl"><PiExamDuotone /></span>
             </div>
             <span className="text-white text-2xl font-bold">ExamPortal</span>
           </div>
@@ -119,7 +120,7 @@ const SignupPage = () => {
           {/* Mobile Logo */}
           <div className="lg:hidden flex justify-center mb-8">
             <div className="w-16 h-16 bg-blue-500 rounded-2xl flex items-center justify-center">
-              <span className="text-white font-bold text-2xl">E</span>
+              <span className="text-white font-bold text-2xl"><PiExam className="size-8"/></span>
             </div>
           </div>
 

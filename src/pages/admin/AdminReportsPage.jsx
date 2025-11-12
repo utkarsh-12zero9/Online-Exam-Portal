@@ -2,6 +2,9 @@ import React, { useState } from 'react';
 import { useSelector } from 'react-redux';
 import AdminLayout from '@/shared/components/layout/AdminLayout';
 import Card from '@/shared/components/ui/Card';
+import Button from '@/shared/components/ui/Button';
+import { exportToCSV } from '@/shared/utils/exportToCSV';
+import { toast } from 'react-toastify';
 
 const AdminReportsPage = () => {
     const courses = useSelector((state) => state.courses.courses);
@@ -10,6 +13,22 @@ const AdminReportsPage = () => {
     const users = useSelector((state) => state.auth.users || []);
 
     const [selectedCourse, setSelectedCourse] = useState('all');
+
+    const recentAttempts = [];
+
+    enrollments.forEach((enrollment) => {
+        enrollment.attempts.forEach((attempt) => {
+            recentAttempts.push({
+                ...attempt,
+                userId: enrollment.userId,
+                courseId: enrollment.courseId,
+            });
+        });
+    });
+
+    // Sort by most recent first and take last 20
+    recentAttempts.sort((a, b) => new Date(b.submittedAt) - new Date(a.submittedAt));
+    const limitedRecentAttempts = recentAttempts.slice(0, 20);
 
     // Calculate overall stats
     const totalStudents = users.filter((u) => u.role === 'user').length;
@@ -80,15 +99,113 @@ const AdminReportsPage = () => {
         .sort((a, b) => b.enrolledStudents - a.enrolledStudents)
         .slice(0, 5);
 
+    const exportCoursePerformance = () => {
+        const data = courseAnalytics.map((course) => ({
+            'Course Title': course.title,
+            'Difficulty': course.difficulty,
+            'Enrolled Students': course.enrolledStudents,
+            'Total Attempts': course.totalAttempts,
+            'Completed Attempts': course.completedAttempts,
+            'Average Score (%)': course.avgScore,
+            'Completion Rate (%)': course.completionRate,
+            'Price (₹)': course.price,
+        }));
+
+        exportToCSV(data, `course-performance-${new Date().toISOString().split('T')[0]}.csv`);
+        toast.success('Course performance data exported successfully!');
+    };
+
+    const exportStudentPerformance = () => {
+        const students = users.filter((u) => u.role === 'user');
+
+        const data = students.map((student) => {
+            const userEnrollments = enrollments.filter((e) => e.userId === student.id);
+            const totalAttempts = userEnrollments.reduce((sum, e) => sum + e.attempts.length, 0);
+
+            let totalScore = 0;
+            let totalMarks = 0;
+            userEnrollments.forEach((enrollment) => {
+                enrollment.attempts.forEach((attempt) => {
+                    totalScore += attempt.score || 0;
+                    totalMarks += attempt.totalMarks || 1;
+                });
+            });
+
+            const avgPercentage = totalMarks > 0 ? ((totalScore / totalMarks) * 100).toFixed(1) : 0;
+
+            return {
+                'Student Name': student.name,
+                'Email': student.email,
+                'Enrolled Courses': userEnrollments.length,
+                'Total Attempts': totalAttempts,
+                'Total Score': totalScore,
+                'Total Marks': totalMarks,
+                'Average Score (%)': avgPercentage,
+                'Joined Date': student.createdAt ? new Date(student.createdAt).toLocaleDateString() : 'N/A',
+            };
+        });
+
+        exportToCSV(data, `student-performance-${new Date().toISOString().split('T')[0]}.csv`);
+        toast.success('Student performance data exported successfully!');
+    };
+
+    const exportDetailedAttempts = () => {
+        const data = [];
+
+        enrollments.forEach((enrollment) => {
+            const user = users.find((u) => u.id === enrollment.userId);
+            const course = courses.find((c) => c.id === enrollment.courseId);
+
+            enrollment.attempts.forEach((attempt) => {
+                data.push({
+                    'Student Name': user?.name || 'Unknown',
+                    'Student Email': user?.email || 'Unknown',
+                    'Course Title': course?.title || 'Unknown',
+                    'Attempt Date': new Date(attempt.submittedAt).toLocaleString(),
+                    'Score': attempt.score,
+                    'Total Marks': attempt.totalMarks,
+                    'Percentage': attempt.percentage,
+                    'Total Questions': attempt.totalQuestions,
+                    'Answered Questions': attempt.answeredQuestions,
+                    'Status': attempt.status,
+                    // ADD THESE LINES:
+                    'Violation Count': attempt.violationCount || 0,
+                    'Auto Submitted': attempt.autoSubmitted ? 'Yes' : 'No',
+                    'Submission Reason': attempt.submissionReason || 'User submitted',
+                    'Violations Details': attempt.violations
+                        ? attempt.violations.map(v => v.description).join('; ')
+                        : 'None',
+                });
+            });
+        });
+
+        exportToCSV(data, `detailed-attempts-${new Date().toISOString().split('T')[0]}.csv`);
+        toast.success('Detailed attempts data exported successfully!');
+    };
+
+
     return (
         <AdminLayout>
             <div>
+                {/* Export report as CSV */}
                 <div className="flex items-center justify-between mb-6">
                     <div>
                         <h1 className="text-3xl font-bold text-gray-900 mb-2">Analytics & Reports</h1>
                         <p className="text-gray-600">Comprehensive insights into course and student performance</p>
                     </div>
+                    <div className="flex gap-3">
+                        <Button variant="secondary" size="sm" onClick={exportCoursePerformance}>
+                            📊 Export Courses
+                        </Button>
+                        <Button variant="secondary" size="sm" onClick={exportStudentPerformance}>
+                            👥 Export Students
+                        </Button>
+                        <Button variant="secondary" size="sm" onClick={exportDetailedAttempts}>
+                            📝 Export Attempts
+                        </Button>
+                    </div>
                 </div>
+
 
                 {/* Overall Stats Grid */}
                 <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 mb-6">
@@ -207,68 +324,94 @@ const AdminReportsPage = () => {
 
                 {/* Detailed Course Analytics Table */}
                 <Card className="p-6">
-                    <div className="flex items-center justify-between mb-4">
-                        <h2 className="text-xl font-bold text-gray-900">Course-wise Performance</h2>
-                        <select
-                            value={selectedCourse}
-                            onChange={(e) => setSelectedCourse(e.target.value)}
-                            className="border border-gray-300 rounded-lg px-3 py-2 text-sm"
-                        >
-                            <option value="all">All Courses</option>
-                            {courses.map((course) => (
-                                <option key={course.id} value={course.id}>
-                                    {course.title}
-                                </option>
-                            ))}
-                        </select>
-                    </div>
+                    <h2 className="text-xl font-bold text-gray-900 mb-4">Recent Exam Attempts</h2>
 
                     <div className="overflow-x-auto">
                         <table className="w-full">
                             <thead className="bg-gray-50 border-b border-gray-200">
                                 <tr>
-                                    <th className="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase">Course</th>
-                                    <th className="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase">Difficulty</th>
-                                    <th className="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase">Enrolled</th>
-                                    <th className="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase">Attempts</th>
-                                    <th className="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase">Avg Score</th>
-                                    <th className="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase">Completion</th>
+                                    <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Student</th>
+                                    <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Course</th>
+                                    <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Score</th>
+                                    <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Date</th>
+                                    <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Violations</th>
+                                    <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Status</th>
                                 </tr>
                             </thead>
-                            <tbody className="divide-y divide-gray-200">
-                                {filteredAnalytics.map((course) => (
-                                    <tr key={course.id} className="hover:bg-gray-50">
-                                        <td className="px-4 py-3 text-sm font-medium text-gray-900">{course.title}</td>
-                                        <td className="px-4 py-3">
-                                            <span
-                                                className={`px-2 py-1 rounded text-xs font-semibold ${course.difficulty === 'easy'
-                                                        ? 'bg-emerald-100 text-emerald-700'
-                                                        : course.difficulty === 'medium'
-                                                            ? 'bg-yellow-100 text-yellow-700'
-                                                            : 'bg-red-100 text-red-700'
-                                                    }`}
-                                            >
-                                                {course.difficulty}
-                                            </span>
-                                        </td>
-                                        <td className="px-4 py-3 text-sm text-gray-900">{course.enrolledStudents}</td>
-                                        <td className="px-4 py-3 text-sm text-gray-900">{course.totalAttempts}</td>
-                                        <td className="px-4 py-3">
-                                            <span className="text-sm font-semibold text-gray-900">{course.avgScore}%</span>
-                                        </td>
-                                        <td className="px-4 py-3">
-                                            <div className="flex items-center gap-2">
-                                                <div className="flex-1 bg-gray-200 rounded-full h-2">
-                                                    <div
-                                                        className="bg-blue-500 h-2 rounded-full"
-                                                        style={{ width: `${course.completionRate}%` }}
-                                                    />
+                            <tbody className="bg-white divide-y divide-gray-200">
+                                {recentAttempts.map((attempt, idx) => {
+                                    const student = users.find((u) => u.id === attempt.userId);
+                                    const course = courses.find((c) => c.id === attempt.courseId);
+
+                                    return (
+                                        <tr
+                                            key={idx}
+                                            className={attempt.violationCount > 0 ? 'bg-red-50' : 'hover:bg-gray-50'}
+                                        >
+                                            <td className="px-6 py-4 text-sm">
+                                                <div className="font-medium text-gray-900">{student?.name || 'Unknown'}</div>
+                                                <div className="text-gray-500">{student?.email || 'N/A'}</div>
+                                            </td>
+                                            <td className="px-6 py-4 text-sm text-gray-900">
+                                                {course?.title || 'Unknown Course'}
+                                            </td>
+                                            <td className="px-6 py-4 text-sm">
+                                                <div className="font-semibold text-gray-900">
+                                                    {attempt.score}/{attempt.totalMarks}
                                                 </div>
-                                                <span className="text-xs text-gray-600">{course.completionRate}%</span>
-                                            </div>
-                                        </td>
-                                    </tr>
-                                ))}
+                                                <div className="text-gray-500 text-xs">
+                                                    ({attempt.percentage}%)
+                                                </div>
+                                            </td>
+                                            <td className="px-6 py-4 text-sm text-gray-500">
+                                                {new Date(attempt.submittedAt).toLocaleDateString('en-US', {
+                                                    year: 'numeric',
+                                                    month: 'short',
+                                                    day: 'numeric',
+                                                })}
+                                            </td>
+
+                                            {/* Violations Column */}
+                                            <td className="px-6 py-4 text-sm">
+                                                {attempt.violationCount > 0 ? (
+                                                    <div className="flex flex-col gap-1">
+                                                        <span className="px-2 py-1 bg-red-100 text-red-700 rounded-full text-xs font-semibold inline-flex items-center gap-1 w-fit">
+                                                            ⚠️ {attempt.violationCount}
+                                                        </span>
+                                                        {attempt.violations && (
+                                                            <button
+                                                                onClick={() => {
+                                                                    const violationText = attempt.violations
+                                                                        .map((v, i) => `${i + 1}. ${v.description}\n   at ${new Date(v.timestamp).toLocaleTimeString()}`)
+                                                                        .join('\n\n');
+                                                                    alert(`Proctoring Violations:\n\n${violationText}`);
+                                                                }}
+                                                                className="text-xs text-blue-600 hover:text-blue-800 underline text-left"
+                                                            >
+                                                                View Details
+                                                            </button>
+                                                        )}
+                                                    </div>
+                                                ) : (
+                                                    <span className="text-gray-500">None</span>
+                                                )}
+                                            </td>
+
+                                            {/* Status Column */}
+                                            <td className="px-6 py-4 text-sm">
+                                                {attempt.autoSubmitted ? (
+                                                    <span className="px-2 py-1 bg-orange-100 text-orange-700 rounded-full text-xs font-semibold">
+                                                        Auto-Submitted
+                                                    </span>
+                                                ) : (
+                                                    <span className="px-2 py-1 bg-green-100 text-green-700 rounded-full text-xs font-semibold">
+                                                        Normal
+                                                    </span>
+                                                )}
+                                            </td>
+                                        </tr>
+                                    );
+                                })}
                             </tbody>
                         </table>
                     </div>

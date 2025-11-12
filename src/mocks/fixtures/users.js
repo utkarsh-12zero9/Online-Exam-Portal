@@ -11,9 +11,9 @@ export const mockUsers = [
   },
   {
     id: 2,
-    name: 'John Doe',
-    email: 'john@test.com',
-    password: 'test123',
+    name: 'Jiya Sharma',
+    email: 'jiya@test.com',
+    password: 'jiya123',
     role: 'user',
     phone: '+91 9876543211',
     bio: 'Computer Science Student',
@@ -29,4 +29,27 @@ export const mockUsers = [
     bio: 'Engineering Student',
     createdAt: '2024-02-01T00:00:00.000Z',
   },
+  {
+    id: 4,
+    name: 'Sunny Deol',
+    email: 'sunny@test.com',
+    password: 'sunny123',
+    role: 'user',
+    phone: '+91 9876543201',
+    bio: 'Actor and Filmmaker',
+    createdAt: '2025-11-12T00:00:00.000Z',
+  },
+  {
+    id: 5,
+    name: 'Dirrector Karan',
+    email: 'd@test.com',
+    password: 'd123456',
+    role: 'admin',
+    phone: '+91 8886543210',
+    bio: 'Director and Producer',
+    createdAt: '2025-10-11T00:00:00.000Z',
+  },
 ];
+
+// For backward compatibility
+export const users = mockUsers;

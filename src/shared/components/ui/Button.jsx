@@ -15,7 +15,7 @@ const Button = ({ children, onClick, type = 'button', fullWidth, loading, varian
       type={type}
       onClick={onClick}
       disabled={loading || disabled}
-      className={`${baseStyle} ${variants[variant]} ${fullWidth ? 'w-full' : ''}`}
+      className={`${baseStyle} ${variants[variant]} ${fullWidth ? 'w-full' : ''} cursor-pointer`}
     >
       {loading ? 'Loading...' : children}
     </button>
