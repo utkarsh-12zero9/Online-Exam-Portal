@@ -188,7 +188,7 @@ const MyCoursesPage = () => {
                                     Browse available courses and enroll to start learning
                                 </p>
                                 <Button variant="primary" onClick={() => navigate('/user/courses')}>
-                                    Browse Courses
+                                    Enroll now
                                 </Button>
                             </div>
                         </div>

@@ -33,7 +33,7 @@ export const mockUsers = [
     id: 4,
     name: 'Sunny Deol',
     email: 'sunny@test.com',
-    password: 'sunny123',
+    password: 'test123',
     role: 'user',
     phone: '+91 9876543201',
     bio: 'Actor and Filmmaker',
