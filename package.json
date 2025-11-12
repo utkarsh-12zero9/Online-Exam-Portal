@@ -3,6 +3,8 @@
   "private": true,
   "version": "0.0.0",
   "type": "module",
+  "author": "Utkarsh Kumar Singh",
+  "description": "A comprehensive online exam portal with admin dashboard and user portal featuring authentication, RBAC, course management, and proctoring capabilities.",
   "scripts": {
     "dev": "vite",
     "build": "vite build",

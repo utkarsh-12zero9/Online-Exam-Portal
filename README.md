@@ -1,4 +1,31 @@
-# Online Exam Portal — Admin Dashboard & User Portal
+#
+
+<div align="center">
+   <p>
+      <strong>Connect with the author</strong>
+   </p>
+   <p>
+      <a href="https://github.com/utkarsh-12zero9" target="_blank" rel="noopener">
+         <img src="https://img.shields.io/badge/GitHub-@utkarsh--12zero9-181717?style=for-the-badge&logo=github" alt="GitHub">
+      </a>
+      <a href="https://x.com/Utkarsh_12zero9" target="_blank" rel="noopener">
+         <img src="https://img.shields.io/badge/X-@Utkarsh_12zero9-1DA1F2?style=for-the-badge&logo=twitter" alt="X">
+      </a>
+      <a href="https://www.linkedin.com/in/utkarsh-12zero9" target="_blank" rel="noopener">
+         <img src="https://img.shields.io/badge/LinkedIn-in-blue?style=for-the-badge&logo=linkedin" alt="LinkedIn">
+      </a>
+      <a href="https://utkarsh-react-portfolio.netlify.app/" target="_blank" rel="noopener">
+         <img src="https://img.shields.io/circleci/build/:vcsType/:user/:repo
+         " alt="Portfolio">
+      </a>
+      <a href="mailto:utkarshkumarsingh120903@gmail.com">
+         <img src="https://img.shields.io/badge/Email-you%40example.com-D14836?style=for-the-badge&logo=gmail" alt="Email">
+      </a>
+   </p>
+   <p><em>Tip: replace the above links and handles with your own to personalize this README.</em></p>
+</div>
+
+# Online Exam Portal
 
 ## Table of Contents
 
@@ -23,11 +50,11 @@
 
 ## Project Overview
 
-The **Online Exam Portal** is a React-based single-page application featuring an Admin Dashboard and a User Portal. It includes authentication, role-based access control, course management (CRUD), bulk operations, proctoring features (fullscreen enforcement, tab switch detection, copy/paste restrictions), real-time exam attempt tracking, and CSV export for analytics.
+The **Online Exam Portal** is a React based single page application featuring an Admin Panel and a User Dashboard. It includes authentication, RBACR(Role Based Access Control), course management (CRUD operations), bulk operations, proctoring features (fullscreen enforcement, tab switch detection, copy/paste restrictions), real-time exam attempt tracking, and CSV export for analytics.
 
 ## Features
 
-- ✅ Protected routes and role-based access control
+- ✅ Protected routes and RBAC
 - ✅ Admin: create/edit/delete courses, modules, and questions
 - ✅ Admin: bulk operations (select all, bulk delete, confirmation modals)
 - ✅ Admin: CSV export for analytics and detailed reports
@@ -37,20 +64,20 @@ The **Online Exam Portal** is a React-based single-page application featuring an
 - ✅ Real-time attempt counts and per-attempt history visible to users and admins
 - ✅ LocalStorage-based persistence for auth state (re-login-friendly)
 - ✅ Responsive UI with a consistent, modern look
-- ✅ Clean, readable README and documentation
 
 ## Tech Stack
 
-| Technology | Purpose |
-|-----------|---------|
-| **JavaScript (ES6+)** | Language |
-| **React** | Frontend framework |
-| **Redux Toolkit** | State management |
-| **Tailwind CSS** | Styling & utility classes |
-| **React Router** | Routing |
-| **Custom Hooks** | Proctoring (fullscreen, tab switches, etc.) |
-| **Mock Data** | Redux-based local data storage |
-| **CSV Export** | Analytics utilities |
+| Technology            | Purpose                                     |
+| --------------------- | ------------------------------------------- |
+| **JavaScript (ES6+)** | Language                                    |
+| **React**             | Frontend framework                          |
+| **Redux Toolkit**     | State management                            |
+| **Tailwind CSS**      | Styling & utility classes                   |
+| **React Icons**       | Icons                                       |
+| **React Router**      | Routing                                     |
+| **Custom Hooks**      | Proctoring (fullscreen, tab switches, etc.) |
+| **Mock Data**         | Redux-based local data storage              |
+| **CSV Export**        | Analytics utilities                         |
 
 ## Prerequisites
 
@@ -73,11 +100,13 @@ cd Online-Exam-Portal
 ### Install dependencies
 
 Using npm:
+
 ```bash
 npm install
 ```
 
 Or using Yarn:
+
 ```bash
 yarn install
 ```
@@ -89,10 +118,11 @@ yarn install
 Start the development server with:
 
 ```bash
-npm run start
+npm run dev
 ```
 
 Or with Yarn:
+
 ```bash
 yarn start
 ```
@@ -108,6 +138,7 @@ npm run build
 ```
 
 Or with Yarn:
+
 ```bash
 yarn build
 ```
@@ -115,19 +146,23 @@ yarn build
 ## How to Use (Admin)
 
 1. **Login as Admin**
+
    - Access the login page and enter admin credentials
    - You'll be redirected to the Admin Dashboard
 
 2. **Manage Courses**
+
    - Navigate to the Courses section
    - Create new courses, edit existing ones, or delete courses
    - Use bulk select and bulk delete for multiple operations
 
 3. **Manage Modules & Questions**
+
    - Within each course, manage modules
    - Add, edit, or delete questions for each module
 
 4. **View Reports & Analytics**
+
    - Access the Reports section for detailed analytics
    - Export data to CSV for further analysis
    - View violation reports and auto-submission indicators
@@ -140,18 +175,22 @@ yarn build
 ## How to Use (User)
 
 1. **Login & Dashboard**
+
    - Login with user credentials
    - View your dashboard with enrolled courses, progress, and recent scores
 
 2. **Enroll in Courses**
+
    - Browse available courses
    - Enroll in courses of your choice
 
 3. **Start Exams**
+
    - View enrolled courses and select an exam to start
    - Proctoring features activate (fullscreen, tab switch detection, etc.)
 
 4. **Complete Exam**
+
    - Answer questions within the time limit
    - Submit your answers
    - View your score and detailed results
@@ -231,6 +270,7 @@ The project uses **in-app Redux state** with mock data for quick iteration and t
 ### Typical Data Shapes
 
 **User:**
+
 ```javascript
 {
   id: number,
@@ -245,6 +285,7 @@ The project uses **in-app Redux state** with mock data for quick iteration and t
 ```
 
 **Course:**
+
 ```javascript
 {
   id: number,
@@ -260,6 +301,7 @@ The project uses **in-app Redux state** with mock data for quick iteration and t
 ```
 
 **Enrollment:**
+
 ```javascript
 {
   id: number,
@@ -271,6 +313,7 @@ The project uses **in-app Redux state** with mock data for quick iteration and t
 ```
 
 **Attempt:**
+
 ```javascript
 {
   id: number,
@@ -291,6 +334,7 @@ The project uses **in-app Redux state** with mock data for quick iteration and t
 ```
 
 **Question:**
+
 ```javascript
 {
   id: number,
@@ -317,17 +361,21 @@ For Vite projects, prefix environment variables with `VITE_`.
 ## Building for Production
 
 1. **Ensure environment-specific config is loaded**
+
    - Update `.env.production` with production values
 
 2. **Review network requests**
+
    - Ensure CSV exports use proper data formatting
    - Test all API integrations
 
-3. **Test role-based access control**
+3. **Test RBAC**
+
    - Verify different user roles have appropriate access
    - Ensure admin features are restricted
 
 4. **Optimize assets**
+
    ```bash
    npm run build
    ```
@@ -338,21 +386,25 @@ For Vite projects, prefix environment variables with `VITE_`.
 ## Testing
 
 ### Unit Tests
+
 - Test Redux slices (auth, enrollments, courses)
 - Test utility functions (CSV export, formatters)
 
 ### Component-level Tests
+
 - Test Admin CRUD flows
 - Test User dashboard and exam interface
 - Test proctoring features
 
 ### End-to-End Tests
+
 - Test login flows
 - Test admin course management
 - Test exam submission and scoring
 - Test CSV exports
 
 ### Manual QA Checklist
+
 - [ ] Test bulk operations
 - [ ] Test CSV exports with various data
 - [ ] Test proctoring toggles and violations
@@ -364,11 +416,13 @@ For Vite projects, prefix environment variables with `VITE_`.
 ## Quality and Accessibility
 
 ### Current Implementation
-- Role-based access control
+
+- RBAC
 - Protected routes for sensitive pages
 - Error handling and user feedback
 
 ### Improvements to Implement
+
 - ✅ Improve contrast for accessibility compliance
 - ✅ Ensure keyboard navigation for all interactive controls
 - ✅ Add ARIA labels for screen readers
@@ -379,42 +433,50 @@ For Vite projects, prefix environment variables with `VITE_`.
 ## Extending the Project
 
 ### Backend Integration
+
 - Replace mock data with REST/GraphQL API calls
 - Implement proper authentication with JWT tokens
 - Add server-side validation and security
 
 ### Advanced Proctoring
+
 - Integrate webcam-based proctoring
 - Add server-side review and violation tracking
 - Implement AI-based cheating detection
 
 ### Enhanced Analytics
+
 - Build advanced analytics dashboards
 - Add performance metrics and insights
 - Export detailed reports in multiple formats
 
 ### Mobile Extension
+
 - Develop React Native mobile app
 - Sync data between web and mobile
 
 ### Additional Features
+
 - Real-time notifications
 - Discussion forums per course
 - Peer review system
 - Adaptive testing
 
 ## Quick-Start Commands
-________________________________________________
-|     Command      |        Description        |
-|------------------|---------------------------|
-|                  |                           |
-| `npm run start`  | Start development server  |
-| `npm run build`  | Build for production      |
-| `npm run lint`   | Run linter                |
-| `npm run format` | Format code               |
-| `npm test`       | Run tests                 |
-|                  |                           |
-________________________________________________
+
+---
+
+| Command          | Description              |
+| ---------------- | ------------------------ |
+|                  |                          |
+| `npm run start`  | Start development server |
+| `npm run build`  | Build for production     |
+| `npm run lint`   | Run linter               |
+| `npm run format` | Format code              |
+| `npm test`       | Run tests                |
+|                  |                          |
+
+---
 
 ## Known Issues
 
