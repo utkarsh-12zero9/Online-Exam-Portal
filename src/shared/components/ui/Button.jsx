@@ -1,7 +1,7 @@
 import React from 'react';
 
 const Button = ({ children, onClick, type = 'button', fullWidth, loading, variant = 'primary', disabled }) => {
-  const baseStyle = 'px-6 py-3 rounded-lg font-medium transition-all disabled:opacity-50 disabled:cursor-not-allowed focus:ring-2 focus:ring-offset-2';
+  const baseStyle = 'px-5 py-2.5 rounded-lg text-md font-medium transition-all disabled:opacity-50 disabled:cursor-not-allowed focus:ring-2 focus:ring-offset-2 ';
   
   const variants = {
     primary: 'bg-emerald-500 text-white hover:bg-emerald-600 active:bg-emerald-700 focus:ring-emerald-500',

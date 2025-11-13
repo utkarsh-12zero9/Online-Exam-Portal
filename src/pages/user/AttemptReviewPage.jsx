@@ -78,7 +78,7 @@ const AttemptReviewPage = () => {
                 </Button>
 
                 {/* Summary Card */}
-                <Card className="p-6 mb-6">
+                <Card className="p-6 mb-6 mt-4">
                     <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-4">
                         <div>
                             <h1 className="text-2xl sm:text-3xl font-bold text-gray-900 mb-2">{course.title}</h1>

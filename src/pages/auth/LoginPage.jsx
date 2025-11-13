@@ -8,7 +8,7 @@ import {
 } from "@/features/auth/slices/authSlice";
 import { toast } from "react-toastify";
 import Button from "@/shared/components/ui/Button";
-import { PiExam, PiExamDuotone } from "react-icons/pi";
+import { Newspaper } from "lucide-react";
 
 const LoginPage = () => {
   const [formData, setFormData] = useState({ email: "", password: "" });
@@ -84,7 +84,7 @@ const LoginPage = () => {
           <div className="flex items-center gap-3 mb-16">
             <div className="w-12 h-12 bg-white rounded-xl flex items-center justify-center">
               <span className="text-emerald-500 font-bold text-2xl">
-                <PiExamDuotone />
+                <Newspaper />
               </span>
             </div>
             <span className="text-white text-2xl font-bold">ExamPortal</span>
@@ -125,7 +125,7 @@ const LoginPage = () => {
           {/* Mobile Logo */}
           <div className="lg:hidden flex justify-center mb-8">
             <div className="w-16 h-16 bg-emerald-500 rounded-2xl flex items-center justify-center">
-              <span className="text-white font-bold text-2xl"><PiExam className="size-8"/></span>
+              <span className="text-white font-bold text-2xl"><Newspaper className="size-8"/></span>
             </div>
           </div>
 

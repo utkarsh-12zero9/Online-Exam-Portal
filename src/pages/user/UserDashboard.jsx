@@ -80,7 +80,7 @@ const UserDashboardPage = () => {
 
     return (
         <UserLayout>
-            <div>
+            <div className="px-6 py-4">
                 {/* Welcome Header */}
                 <div className="mb-8">
                     <h1 className="text-3xl font-bold text-gray-900 mb-2">

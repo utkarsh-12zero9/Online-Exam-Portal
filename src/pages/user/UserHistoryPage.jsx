@@ -4,6 +4,17 @@ import { useNavigate } from 'react-router-dom';
 import UserLayout from '@/shared/components/layout/UserLayout';
 import Card from '@/shared/components/ui/Card';
 import Button from '@/shared/components/ui/Button';
+import {
+    FileText,
+    CheckCircle,
+    Clock,
+    AlertTriangle,
+    Info,
+    Calendar,
+    HelpCircle,
+    MessageSquare,
+    BookOpen,
+} from 'lucide-react';
 
 const UserHistoryPage = () => {
     const navigate = useNavigate();
@@ -58,83 +69,92 @@ const UserHistoryPage = () => {
         return 'bg-red-100 text-red-700 border-red-200';
     };
 
+
+
     return (
         <UserLayout>
-            <div>
-                <h1 className="text-3xl font-bold text-gray-900 mb-2">Attempt History</h1>
-                <p className="text-gray-600 mb-6">View your past exam attempts and scores</p>
+            <div className="max-w-6xl mx-auto px-2 py-4 space-y-6">
+                {/* Header */}
+                <div className="mb-6">
+                    <h1 className="text-3xl font-bold text-gray-900 mb-2">Attempt History</h1>
+                    <p className="text-gray-600">View your past exam attempts and scores</p>
+                </div>
 
                 {sortedAttempts.length > 0 ? (
-                    <div className="grid grid-cols-1 gap-4">
+                    <div className="grid grid-cols-1 gap-6">
                         {sortedAttempts.map((attempt, idx) => {
                             const totalMarks = attempt.totalMarks || (attempt.totalQuestions * 1) || 1;
                             const score = attempt.score || 0;
-                            const percentage = totalMarks > 0
-                                ? ((score / totalMarks) * 100).toFixed(1)
-                                : '0.0';
+                            const percentage = totalMarks > 0 ? ((score / totalMarks) * 100).toFixed(1) : '0.0';
 
                             return (
-                                <Card key={idx} className="p-5 hover:shadow-lg transition-shadow">
-                                    <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-4">
+                                <Card key={idx} className="p-6 hover:shadow-lg transition-shadow border border-gray-200 rounded-xl">
+                                    <div className="flex flex-col md:flex-row md:items-start md:justify-between gap-6">
                                         {/* Course Info */}
-                                        <div className="flex-1">
-                                            <div className="flex items-start gap-3 mb-2 flex-wrap">
-                                                <h2 className="text-xl font-bold text-gray-900">
+                                        <div className="flex-1 min-w-0">
+                                            <div className="flex items-start gap-3 mb-3 flex-wrap">
+                                                <h2 className="text-xl font-bold text-gray-900 flex items-center gap-2">
+                                                    <FileText className="w-5 h-5 text-blue-500" />
                                                     {attempt.course?.title || 'Unknown Course'}
                                                 </h2>
                                                 <span
-                                                    className={`px-3 py-1 rounded border text-xs font-semibold ${getScoreBadge(
-                                                        score,
-                                                        totalMarks
-                                                    )}`}
+                                                    className={`px-3 py-1 rounded-full border text-xs font-semibold flex items-center gap-1 ${getScoreBadge(score, totalMarks)}`}
                                                 >
+                                                    <CheckCircle className="w-3 h-3" />
                                                     {attempt.status === 'completed' ? 'Completed' : 'In Progress'}
                                                 </span>
 
                                                 {/* Violation Badge */}
                                                 {attempt.violationCount > 0 && (
                                                     <span className="px-2 py-1 bg-red-100 text-red-700 rounded-full text-xs font-semibold flex items-center gap-1">
-                                                        ⚠️ {attempt.violationCount} Violation{attempt.violationCount > 1 ? 's' : ''}
+                                                        <AlertTriangle className="w-3 h-3" />
+                                                        {attempt.violationCount} Violation{attempt.violationCount > 1 ? 's' : ''}
                                                     </span>
                                                 )}
 
                                                 {/* Auto-submitted Badge */}
                                                 {attempt.autoSubmitted && (
-                                                    <span className="px-2 py-1 bg-orange-100 text-orange-700 rounded-full text-xs font-semibold">
+                                                    <span className="px-2 py-1 bg-orange-100 text-orange-700 rounded-full text-xs font-semibold flex items-center gap-1">
+                                                        <Clock className="w-3 h-3" />
                                                         Auto-Submitted
                                                     </span>
                                                 )}
                                             </div>
 
-                                            <div className="grid grid-cols-2 sm:grid-cols-3 gap-3 text-sm text-gray-600">
-                                                <div>
-                                                    <span className="text-gray-500">Submitted:</span>
-                                                    <p className="font-semibold text-gray-900">
-                                                        {formatDate(attempt.submittedAt)}
-                                                    </p>
+                                            <div className="grid grid-cols-2 sm:grid-cols-3 gap-4 text-sm text-gray-600 mb-4">
+                                                <div className="flex items-center gap-2">
+                                                    <Calendar className="w-4 h-4 text-gray-400" />
+                                                    <div>
+                                                        <span className="text-gray-500 text-xs">Submitted:</span>
+                                                        <p className="font-semibold text-gray-900">{formatDate(attempt.submittedAt)}</p>
+                                                    </div>
                                                 </div>
-                                                <div>
-                                                    <span className="text-gray-500">Questions:</span>
-                                                    <p className="font-semibold text-gray-900">
-                                                        {attempt.totalQuestions || 0}
-                                                    </p>
+                                                <div className="flex items-center gap-2">
+                                                    <HelpCircle className="w-4 h-4 text-gray-400" />
+                                                    <div>
+                                                        <span className="text-gray-500 text-xs">Questions:</span>
+                                                        <p className="font-semibold text-gray-900">{attempt.totalQuestions || 0}</p>
+                                                    </div>
                                                 </div>
-                                                <div>
-                                                    <span className="text-gray-500">Answered:</span>
-                                                    <p className="font-semibold text-gray-900">
-                                                        {attempt.answeredQuestions || Object.keys(attempt.answers || {}).length}
-                                                    </p>
+                                                <div className="flex items-center gap-2">
+                                                    <MessageSquare className="w-4 h-4 text-gray-400" />
+                                                    <div>
+                                                        <span className="text-gray-500 text-xs">Answered:</span>
+                                                        <p className="font-semibold text-gray-900">
+                                                            {attempt.answeredQuestions || Object.keys(attempt.answers || {}).length}
+                                                        </p>
+                                                    </div>
                                                 </div>
                                             </div>
 
                                             {/* Violation Details */}
                                             {attempt.violationCount > 0 && attempt.violations && (
-                                                <div className="mt-4 p-3 bg-red-50 border border-red-200 rounded-lg">
+                                                <div className="mt-4 p-4 bg-red-50 border border-red-200 rounded-lg">
                                                     <p className="text-xs font-semibold text-red-700 mb-2 flex items-center gap-2">
-                                                        <span>⚠️</span>
+                                                        <AlertTriangle className="w-4 h-4" />
                                                         <span>Proctoring Violations Detected:</span>
                                                     </p>
-                                                    <div className="space-y-1">
+                                                    <div className="space-y-1.5">
                                                         {attempt.violations.slice(0, 3).map((violation, vIdx) => (
                                                             <div key={vIdx} className="text-xs text-red-600 flex items-start gap-2">
                                                                 <span className="mt-0.5">•</span>
@@ -160,15 +180,10 @@ const UserHistoryPage = () => {
                                         </div>
 
                                         {/* Score Display */}
-                                        <div className="flex flex-col items-start md:items-end gap-2">
+                                        <div className="flex flex-col items-start md:items-end gap-3">
                                             <div className="text-center md:text-right">
                                                 <p className="text-sm text-gray-500 mb-1">Score</p>
-                                                <p
-                                                    className={`text-3xl font-bold ${getScoreColor(
-                                                        score,
-                                                        totalMarks
-                                                    )}`}
-                                                >
+                                                <p className={`text-3xl font-bold ${getScoreColor(score, totalMarks)}`}>
                                                     {score}/{totalMarks}
                                                 </p>
                                                 <p className="text-sm text-gray-600 mt-1">{percentage}%</p>
@@ -187,7 +202,8 @@ const UserHistoryPage = () => {
                                                     size="sm"
                                                     onClick={() => navigate(`/user/courses/${attempt.course?.id}`)}
                                                 >
-                                                    View Course
+                                                    <BookOpen className="w-4 h-4 mr-1 " />
+                                                    <text>Course</text>
                                                 </Button>
                                             </div>
                                         </div>
@@ -197,13 +213,12 @@ const UserHistoryPage = () => {
                                     <div className="mt-4">
                                         <div className="w-full bg-gray-200 rounded-full h-2">
                                             <div
-                                                className={`h-2 rounded-full transition-all ${
-                                                    percentage >= 80
+                                                className={`h-2 rounded-full transition-all ${percentage >= 80
                                                         ? 'bg-emerald-500'
                                                         : percentage >= 60
-                                                        ? 'bg-yellow-500'
-                                                        : 'bg-red-500'
-                                                }`}
+                                                            ? 'bg-yellow-500'
+                                                            : 'bg-red-500'
+                                                    }`}
                                                 style={{ width: `${Math.min(100, percentage)}%` }}
                                             />
                                         </div>
@@ -215,23 +230,9 @@ const UserHistoryPage = () => {
                 ) : (
                     <Card className="p-12 text-center">
                         <div className="flex flex-col items-center gap-4">
-                            <svg
-                                className="w-20 h-20 text-gray-300"
-                                fill="none"
-                                stroke="currentColor"
-                                viewBox="0 0 24 24"
-                            >
-                                <path
-                                    strokeLinecap="round"
-                                    strokeLinejoin="round"
-                                    strokeWidth={2}
-                                    d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"
-                                />
-                            </svg>
+                            <FileText className="w-20 h-20 text-gray-300" />
                             <div>
-                                <p className="text-lg font-semibold text-gray-900 mb-2">
-                                    No Exam Attempts Yet
-                                </p>
+                                <p className="text-lg font-semibold text-gray-900 mb-2">No Exam Attempts Yet</p>
                                 <p className="text-gray-500 mb-4">
                                     Start taking exams to see your attempt history here
                                 </p>
@@ -245,6 +246,7 @@ const UserHistoryPage = () => {
             </div>
         </UserLayout>
     );
+
 };
 
 export default UserHistoryPage;

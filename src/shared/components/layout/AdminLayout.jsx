@@ -3,7 +3,8 @@ import { Link, useNavigate, useLocation } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import { logout } from "@/features/auth/slices/authSlice";
 import { toast } from "react-toastify";
-import { PiExamDuotone } from "react-icons/pi";
+import { Newspaper } from "lucide-react";
+
 import {
   HiOutlineHome,
   HiOutlineBookOpen,
@@ -88,7 +89,7 @@ const AdminLayout = ({ children }) => {
             <div className="flex items-center gap-3">
               <div className="w-10 h-10 bg-white rounded-lg flex items-center justify-center">
                 <span className="text-blue-600 font-bold text-xl">
-                  <PiExamDuotone />
+                  <Newspaper />
                 </span>
               </div>
               <span className="text-xl font-bold">ExamPortal</span>
