@@ -93,27 +93,31 @@ const AdminSettingsPage = () => {
 
   return (
     <AdminLayout>
-      <div className="max-w-4xl space-y-6">
+      <div className="max-w-4xl mx-auto py-8 px-4 space-y-8">
+
         {/* Header */}
         <div>
           <h2 className="text-2xl sm:text-3xl font-bold text-gray-900">Settings</h2>
-          <p className="text-gray-600 mt-2 text-sm sm:text-base">Manage your account settings and preferences</p>
+          <p className="text-gray-600 mt-2 text-base">
+            Manage your account settings and preferences
+          </p>
         </div>
 
         {/* Profile Settings */}
-        <Card className="p-6">
-          <h3 className="text-xl font-bold text-gray-900 mb-6">Profile Information</h3>
-
-          <form onSubmit={handleProfileUpdate} className="space-y-6">
+        <Card className="p-8 rounded-2xl shadow-xl border border-gray-100">
+          <h3 className="text-xl font-bold text-gray-900 mb-8">Profile Information</h3>
+          <form onSubmit={handleProfileUpdate} className="space-y-8">
             {/* Profile Photo */}
             <div>
-              <label className="block text-sm font-medium text-gray-700 mb-3">Profile Photo</label>
-              <div className="flex items-center gap-6">
-                <div className="w-24 h-24 rounded-full bg-blue-100 flex items-center justify-center overflow-hidden">
+              <label className="block text-sm font-medium text-gray-700 mb-3">
+                Profile Photo
+              </label>
+              <div className="flex items-center gap-8">
+                <div className="w-24 h-24 rounded-full bg-blue-100 flex items-center justify-center overflow-hidden ring-2 ring-blue-300 shadow">
                   {photoPreview || user?.photo ? (
                     <img src={photoPreview || user?.photo} alt="Profile" className="w-full h-full object-cover" />
                   ) : (
-                    <span className="text-blue-600 text-3xl font-bold">{user?.name?.charAt(0)}</span>
+                    <span className="text-blue-600 text-3xl font-bold">{user?.name?.charAt(0).toUpperCase()}</span>
                   )}
                 </div>
                 <div>
@@ -126,16 +130,16 @@ const AdminSettingsPage = () => {
                   />
                   <label
                     htmlFor="photo"
-                    className="cursor-pointer px-4 py-2 bg-blue-500 text-white rounded-lg hover:bg-blue-600 transition-colors inline-block"
+                    className="cursor-pointer px-4 py-2 bg-blue-600 text-white rounded-md font-medium hover:bg-blue-700 transition"
                   >
                     Change Photo
                   </label>
-                  <p className="text-xs text-gray-500 mt-2">JPG, PNG or GIF. Max size 2MB</p>
+                  <p className="text-xs text-gray-500 mt-2">JPG, PNG, or GIF. Max size 2MB</p>
                 </div>
               </div>
             </div>
 
-            {/* Name */}
+            {/* Full Name */}
             <Input
               label="Full Name"
               type="text"
@@ -143,6 +147,7 @@ const AdminSettingsPage = () => {
               value={profileData.name}
               onChange={handleProfileChange}
               required
+              className="text-base"
             />
 
             {/* Email */}
@@ -153,18 +158,18 @@ const AdminSettingsPage = () => {
               value={profileData.email}
               onChange={handleProfileChange}
               required
+              className="text-base"
             />
 
-            <Button type="submit" loading={loading}>
+            <Button type="submit" loading={loading} variant="primary" className="w-full sm:w-auto mt-2">
               Update Profile
             </Button>
           </form>
         </Card>
 
         {/* Password Settings */}
-        <Card className="p-6">
-          <h3 className="text-xl font-bold text-gray-900 mb-6">Change Password</h3>
-
+        <Card className="p-8 rounded-2xl shadow-xl border border-gray-100">
+          <h3 className="text-xl font-bold text-gray-900 mb-8">Change Password</h3>
           <form onSubmit={handlePasswordUpdate} className="space-y-6">
             <Input
               label="Current Password"
@@ -175,7 +180,6 @@ const AdminSettingsPage = () => {
               placeholder="Enter current password"
               required
             />
-
             <Input
               label="New Password"
               type="password"
@@ -185,7 +189,6 @@ const AdminSettingsPage = () => {
               placeholder="Enter new password"
               required
             />
-
             <Input
               label="Confirm New Password"
               type="password"
@@ -195,34 +198,34 @@ const AdminSettingsPage = () => {
               placeholder="Confirm new password"
               required
             />
-
-            <Button type="submit" loading={loading} variant="secondary">
+            <Button type="submit" loading={loading} variant="secondary" className="w-full sm:w-auto mt-2">
               Update Password
             </Button>
           </form>
         </Card>
 
         {/* Account Info */}
-        <Card className="p-6">
+        <Card className="p-8 rounded-2xl shadow-xl border border-gray-100">
           <h3 className="text-xl font-bold text-gray-900 mb-4">Account Information</h3>
-          <div className="space-y-3 text-sm">
-            <div className="flex justify-between py-2 border-b border-gray-200">
-              <span className="text-gray-600">Account Type</span>
-              <span className="font-medium text-gray-900 capitalize">{user?.role}</span>
+          <div className="space-y-3 text-base">
+            <div className="flex justify-between py-3 border-b border-gray-200">
+              <span className="text-gray-600 font-medium">Account Type</span>
+              <span className="font-semibold text-gray-900 capitalize">{user?.role}</span>
             </div>
-            <div className="flex justify-between py-2 border-b border-gray-200">
-              <span className="text-gray-600">Account Status</span>
-              <span className="font-medium text-emerald-600">Active</span>
+            <div className="flex justify-between py-3 border-b border-gray-200">
+              <span className="text-gray-600 font-medium">Account Status</span>
+              <span className="font-semibold text-emerald-600">Active</span>
             </div>
-            <div className="flex justify-between py-2">
-              <span className="text-gray-600">Member Since</span>
-              <span className="font-medium text-gray-900">January 2025</span>
+            <div className="flex justify-between py-3">
+              <span className="text-gray-600 font-medium">Member Since</span>
+              <span className="font-semibold text-gray-900">{/* format dynamic join date here if needed */}January 2025</span>
             </div>
           </div>
         </Card>
       </div>
     </AdminLayout>
   );
+
 };
 
 export default AdminSettingsPage;

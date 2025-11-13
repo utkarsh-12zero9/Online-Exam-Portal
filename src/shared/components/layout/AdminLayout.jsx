@@ -72,15 +72,14 @@ const AdminLayout = ({ children }) => {
       {/* Sidebar */}
       <aside
         className={`
-          fixed lg:static inset-y-0 left-0 z-50
+          fixed lg:sticky inset-y-0 left-0 z-50
           w-64 bg-blue-600 text-white
           transform transition-transform duration-300 ease-in-out
-          ${
-            isSidebarOpen
-              ? "translate-x-0"
-              : "-translate-x-full lg:translate-x-0"
-          }
+          ${isSidebarOpen ? "translate-x-0" : "-translate-x-full lg:translate-x-0"}
           flex flex-col
+          h-screen           
+          overflow-y-auto    
+          top-0              
         `}
       >
         {/* Logo */}
@@ -113,11 +112,10 @@ const AdminLayout = ({ children }) => {
                 key={item.path}
                 to={item.path}
                 onClick={() => setIsSidebarOpen(false)}
-                className={`flex items-center gap-3 px-4 py-3 rounded-lg mb-2 transition-colors ${
-                  isActive
-                    ? "bg-blue-700 text-white"
-                    : "text-blue-100 hover:bg-blue-500 hover:text-white"
-                }`}
+                className={`flex items-center gap-3 px-4 py-3 rounded-lg mb-2 transition-colors ${isActive
+                  ? "bg-blue-700 text-white"
+                  : "text-blue-100 hover:bg-blue-500 hover:text-white"
+                  }`}
               >
                 <Icon className="w-5 h-5" />
                 <span>{item.label}</span>
