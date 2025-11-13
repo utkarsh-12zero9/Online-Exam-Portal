@@ -1,5 +1,4 @@
 export const mockModules = [
-  // React Fundamentals modules
   {
     id: 1,
     courseId: 1,
@@ -25,7 +24,6 @@ export const mockModules = [
     questionCount: 7,
   },
   
-  // Advanced JavaScript modules
   {
     id: 4,
     courseId: 2,

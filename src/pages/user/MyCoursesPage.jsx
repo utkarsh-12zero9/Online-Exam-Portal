@@ -12,6 +12,7 @@ import {
     BookOpen,
     AlertCircle,
     ChevronRight,
+    Repeat1,
     Medal,
 } from 'lucide-react';
 
@@ -21,10 +22,8 @@ const MyCoursesPage = () => {
     const enrollments = useSelector((state) => state.enrollments.enrollments);
     const courses = useSelector((state) => state.courses.courses);
 
-    // Get enrolled courses for current user
     const userEnrollments = enrollments.filter((e) => e.userId === user?.id);
 
-    // Map enrollments to course data
     const enrolledCourses = userEnrollments.map((enrollment) => {
         const course = courses.find((c) => c.id === enrollment.courseId);
         const attemptCount = enrollment.attempts.length;
@@ -54,9 +53,7 @@ const MyCoursesPage = () => {
     };
 
     const getProgressPercentage = (bestScore) => {
-        // Assuming max score is totalQuestions * 1 (1 mark per question)
-        // This is a simplified calculation
-        return Math.min(100, (bestScore / 10) * 10); // Placeholder calculation
+        return Math.min(100, (bestScore / 10) * 10); 
     };
 
 

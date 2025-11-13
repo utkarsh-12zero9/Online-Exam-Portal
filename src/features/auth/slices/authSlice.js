@@ -1,7 +1,6 @@
 import { createSlice } from '@reduxjs/toolkit';
 import { mockUsers as initialUsers, mockUsers } from '@/mocks/fixtures/users';
 
-// Load from localStorage on initialization
 const loadAuthFromStorage = () => {
   try {
     const savedAuth = localStorage.getItem('auth');
@@ -40,7 +39,6 @@ const authSlice = createSlice({
       state.loading = false;
       state.error = null;
       
-      // Save to localStorage
       localStorage.setItem('auth', JSON.stringify({
         user: action.payload,
         isAuthenticated: true,
@@ -58,12 +56,10 @@ const authSlice = createSlice({
       state.isAuthenticated = false;
       state.error = null;
       
-      // Clear localStorage
       localStorage.removeItem('auth');
     },
 
     checkAuth: (state) => {
-      // Re-check localStorage
       try {
         const savedAuth = localStorage.getItem('auth');
         if (savedAuth) {
@@ -84,7 +80,6 @@ const authSlice = createSlice({
     updateUser: (state, action) => {
       state.user = { ...state.user, ...action.payload };
       
-      // Update localStorage
       if (state.isAuthenticated) {
         localStorage.setItem('auth', JSON.stringify({
           user: state.user,
@@ -102,7 +97,6 @@ const authSlice = createSlice({
       };
       state.users.push(newUser);
       
-      // Save updated users list to localStorage
       localStorage.setItem('auth', JSON.stringify({
         user: state.user,
         isAuthenticated: state.isAuthenticated,
@@ -113,7 +107,6 @@ const authSlice = createSlice({
     deleteUser: (state, action) => {
       state.users = state.users.filter((user) => user.id !== action.payload);
       
-      // Update localStorage
       localStorage.setItem('auth', JSON.stringify({
         user: state.user,
         isAuthenticated: state.isAuthenticated,
@@ -127,12 +120,10 @@ const authSlice = createSlice({
       if (userIndex !== -1) {
         state.users[userIndex] = { ...state.users[userIndex], ...updates };
         
-        // Update current user if it's them
         if (state.user?.id === id) {
           state.user = { ...state.user, ...updates };
         }
         
-        // Update localStorage
         localStorage.setItem('auth', JSON.stringify({
           user: state.user,
           isAuthenticated: state.isAuthenticated,
@@ -145,7 +136,6 @@ const authSlice = createSlice({
       const idsToDelete = action.payload;
       state.users = state.users.filter((user) => !idsToDelete.includes(user.id));
       
-      // Update localStorage
       localStorage.setItem('auth', JSON.stringify({
         user: state.user,
         isAuthenticated: state.isAuthenticated,

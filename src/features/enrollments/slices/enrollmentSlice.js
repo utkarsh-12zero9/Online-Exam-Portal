@@ -2,7 +2,7 @@ import { createSlice } from '@reduxjs/toolkit';
 import { mockEnrollments } from '@/mocks/fixtures/enrollments';
 
 const initialState = {
-  enrollments: mockEnrollments, // Initialize with mock data
+  enrollments: mockEnrollments,
   currentAttempt: null,
   loading: false,
   error: null,
@@ -60,10 +60,10 @@ const enrollmentSlice = createSlice({
           percentage: action.payload.percentage,
           answeredQuestions: action.payload.answeredQuestions,
           totalQuestions: action.payload.totalQuestions,
-          violations: action.payload.violations || [], // Add violations
-          violationCount: action.payload.violationCount || 0, // Add count
-          autoSubmitted: action.payload.autoSubmitted || false, // Add flag
-          submissionReason: action.payload.submissionReason || 'User submitted', // Add reason
+          violations: action.payload.violations || [],
+          violationCount: action.payload.violationCount || 0, 
+          autoSubmitted: action.payload.autoSubmitted || false, 
+          submissionReason: action.payload.submissionReason || 'User submitted',
         };
 
         enrollment.attempts.push(completedAttempt);

@@ -58,7 +58,6 @@ const UserProfilePage = () => {
             toast.error('Password must be at least 6 characters!');
             return;
         }
-        // In a real app, you'd verify currentPassword and update
         toast.success('Password updated successfully!');
         setPasswordForm({ currentPassword: '', newPassword: '', confirmPassword: '' });
     };
@@ -66,7 +65,6 @@ const UserProfilePage = () => {
     const handleDeleteAccount = () => {
         if (window.confirm('Are you sure you want to delete your account? This action cannot be undone.')) {
             toast.info('Account deletion requested. Please contact support.');
-            // In production, dispatch delete action
         }
     };
 

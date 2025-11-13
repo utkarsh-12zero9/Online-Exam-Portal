@@ -4,6 +4,9 @@ import tailwindcss from '@tailwindcss/vite';
 import path from 'path';
 
 export default defineConfig({
+  build: {
+    chunkSizeWarningLimit: 1000 
+  },
   plugins: [react(), tailwindcss()],
   resolve: {
     alias: {

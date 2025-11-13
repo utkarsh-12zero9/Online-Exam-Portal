@@ -1,7 +1,7 @@
 export const mockEnrollments = [
     {
         id: 1,
-        userId: 2, // Sunny Deol
+        userId: 2,
         courseId: 1,
         enrolledAt: '2024-11-01T10:00:00.000Z',
         attempts: [
@@ -16,7 +16,6 @@ export const mockEnrollments = [
                 totalQuestions: 10,
                 answeredQuestions: 10,
                 answers: {},
-                // ADD THESE FOR TESTING:
                 violationCount: 2,
                 autoSubmitted: false,
                 violations: [
@@ -36,8 +35,8 @@ export const mockEnrollments = [
     },
     {
         id: 2,
-        userId: 2, // Sunny Deol
-        courseId: 2, // Advanced JavaScript
+        userId: 2,
+        courseId: 2,
         enrolledAt: '2024-11-10T09:00:00.000Z',
         attempts: [
             {
@@ -56,7 +55,7 @@ export const mockEnrollments = [
     },
     {
         id: 3,
-        userId: 3, // Bobby Deol (from your mock users)
+        userId: 3,
         courseId: 1,
         enrolledAt: '2024-11-08T12:00:00.000Z',
         attempts: [

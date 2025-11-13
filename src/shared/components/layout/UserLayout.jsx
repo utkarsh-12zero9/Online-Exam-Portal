@@ -42,7 +42,6 @@ const UserLayout = ({ children }) => {
     navigate("/login");
   };
 
-  // --- Hook for closing profile dropdown on outside click ---
   useEffect(() => {
     const handleClickOutside = (event) => {
       if (

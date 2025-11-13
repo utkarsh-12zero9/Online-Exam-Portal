@@ -14,7 +14,7 @@ const LoginPage = () => {
   const [formData, setFormData] = useState({ email: "", password: "" });
   const [showPassword, setShowPassword] = useState(false);
   const { loading } = useSelector((state) => state.auth);
-  const users = useSelector((state) => state.auth.users); // Get users from store
+  const users = useSelector((state) => state.auth.users);
   const dispatch = useDispatch();
   const navigate = useNavigate();
 
@@ -24,7 +24,6 @@ const LoginPage = () => {
 
   const handleQuickLogin = (email, password) => {
     setFormData({ email, password });
-    // Auto-submit after setting form data
     setTimeout(() => {
       document.getElementById("login-form").requestSubmit();
     }, 100);
@@ -34,9 +33,7 @@ const LoginPage = () => {
     e.preventDefault();
     dispatch(loginStart());
 
-    // Simulate network delay
     setTimeout(() => {
-      // Find user by email
       const user = users.find((u) => u.email === formData.email);
 
       if (!user) {
@@ -45,14 +42,12 @@ const LoginPage = () => {
         return;
       }
 
-      // Check password
       if (user.password !== formData.password) {
         dispatch(loginFailure("Incorrect password"));
         toast.error("Incorrect password. Please try again.");
         return;
       }
 
-      // Login successful
       const userData = {
         id: user.id,
         name: user.name,
@@ -66,7 +61,6 @@ const LoginPage = () => {
       dispatch(loginSuccess(userData));
       toast.success(`Welcome back, ${user.name}!`);
 
-      // Redirect based on role
       navigate(user.role === "admin" ? "/admin" : "/user/dashboard");
     }, 1000);
   };

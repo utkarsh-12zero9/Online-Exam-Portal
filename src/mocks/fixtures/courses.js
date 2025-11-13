@@ -5,8 +5,8 @@ export const mockCourses = [
     description: 'Master the basics of React including components, hooks, and state management',
     domain: 'Web Development',
     difficulty: 'easy',
-    duration: 90, // minutes
-    price: 0, // Free
+    duration: 90, 
+    price: 0, 
     tags: ['React', 'JavaScript', 'Frontend'],
     totalModules: 3,
     totalQuestions: 25,

@@ -15,7 +15,6 @@ const AttemptReviewPage = () => {
     const modules = useSelector((state) => state.modules.modules);
     const questions = useSelector((state) => state.questions.questions);
 
-    // Find the specific attempt
     let attempt = null;
     let course = null;
 
@@ -43,7 +42,6 @@ const AttemptReviewPage = () => {
         );
     }
 
-    // Get all questions for this course
     const courseModules = modules.filter((m) => m.courseId === course.id);
     const allQuestions = questions.filter((q) =>
         courseModules.some((mod) => mod.id === q.moduleId)

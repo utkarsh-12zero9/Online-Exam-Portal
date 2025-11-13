@@ -13,7 +13,6 @@ import {
 const AdminDashboardPage = () => {
   const navigate = useNavigate();
 
-  // Get all Redux state
   const courses = useSelector((state) => state.courses.courses || []);
   const enrollments = useSelector(
     (state) => state.enrollments.enrollments || []
@@ -21,14 +20,12 @@ const AdminDashboardPage = () => {
   const users = useSelector((state) => state.auth.users || []);
   const questions = useSelector((state) => state.questions.questions || []);
 
-  // Calculate stats
   const students = users.filter((u) => u.role === "user");
 
   const totalAttempts = enrollments.reduce((sum, enrollment) => {
     return sum + (enrollment.attempts?.length || 0);
   }, 0);
 
-  // --- STATS CONFIGURATION (CLEANED) ---
   const stats = [
     {
       label: "Total Courses",

@@ -34,7 +34,7 @@ const AdminUserFormPage = () => {
       setForm({
         name: existingUser.name,
         email: existingUser.email,
-        password: '', // Don't show password
+        password: '',
         role: existingUser.role,
         phone: existingUser.phone || '',
         bio: existingUser.bio || '',
@@ -62,7 +62,6 @@ const AdminUserFormPage = () => {
     } else if (!/\S+@\S+\.\S+/.test(form.email)) {
       newErrors.email = 'Email is invalid';
     } else {
-      // Check if email is already taken (excluding current user in edit mode)
       const emailTaken = users.some(
         (u) => u.email === form.email && u.id !== Number(id)
       );
@@ -71,7 +70,6 @@ const AdminUserFormPage = () => {
       }
     }
 
-    // Password validation only for create or if password is being changed
     if (!isEditMode || form.password) {
       if (!form.password) {
         newErrors.password = 'Password is required';
@@ -93,7 +91,6 @@ const AdminUserFormPage = () => {
     }
 
     if (isEditMode) {
-      // Update existing user
       const updates = {
         id: Number(id),
         name: form.name,
@@ -103,7 +100,6 @@ const AdminUserFormPage = () => {
         bio: form.bio,
       };
 
-      // Only update password if it was changed
       if (form.password) {
         updates.password = form.password;
       }
@@ -111,7 +107,6 @@ const AdminUserFormPage = () => {
       dispatch(updateUserById(updates));
       toast.success(`User "${form.name}" updated successfully!`);
     } else {
-      // Create new user
       dispatch(addUser(form));
       toast.success(`User "${form.name}" created successfully!`);
     }

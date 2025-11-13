@@ -3,7 +3,7 @@ import authReducer from '@/features/auth/slices/authSlice';
 import courseReducer from '@/features/courses/slices/courseSlice';
 import moduleReducer from '@/features/modules/slices/moduleSlice';
 import questionReducer from '@/features/questions/slices/questionSlice';
-import enrollmentReducer from '@/features/enrollments/slices/enrollmentSlice'; // Add this
+import enrollmentReducer from '@/features/enrollments/slices/enrollmentSlice';
 
 export const store = configureStore({
   reducer: {
@@ -11,6 +11,6 @@ export const store = configureStore({
     courses: courseReducer,
     modules: moduleReducer,
     questions: questionReducer,
-    enrollments: enrollmentReducer, // Add this line
+    enrollments: enrollmentReducer, 
   },
 });

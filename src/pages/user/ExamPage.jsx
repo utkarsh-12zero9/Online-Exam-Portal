@@ -43,7 +43,6 @@ const ExamPage = () => {
 
   const currentQuestion = allQuestions[currentQuestionIndex];
 
-  // DEFINE handleSubmitExam BEFORE useProctoring hook
   const handleSubmitExam = useCallback(
     (violationsList = [], autoSubmitted = false) => {
       console.log("=== SUBMITTING EXAM ===");
@@ -105,7 +104,6 @@ const ExamPage = () => {
     [allQuestions, currentAttempt, dispatch, navigate, timeRemaining]
   );
 
-  // Proctoring hook (AFTER handleSubmitExam is defined)
   const {
     violations,
     violationCount,
@@ -114,11 +112,9 @@ const ExamPage = () => {
     requestFullscreen,
     exitFullscreen,
   } = useProctoring((violationsList) => {
-    // Auto-submit on max violations - FIXED typo here
     handleSubmitExam(violationsList, true);
   }, proctoringAccepted);
 
-  // Proctoring handlers
   const handleAcceptProctoring = () => {
     setProctoringAccepted(true);
     setShowProctoringModal(false);
@@ -131,7 +127,6 @@ const ExamPage = () => {
     navigate("/user/my-courses");
   };
 
-  // Prevent browser back button
   useEffect(() => {
     const handlePopState = (e) => {
       if (!examCompleted && currentAttempt) {
@@ -151,7 +146,6 @@ const ExamPage = () => {
     };
   }, [currentAttempt, examCompleted]);
 
-  // Prevent page refresh/close during exam
   useEffect(() => {
     const handleBeforeUnload = (e) => {
       if (!examCompleted && currentAttempt) {
@@ -166,7 +160,6 @@ const ExamPage = () => {
     return () => window.removeEventListener("beforeunload", handleBeforeUnload);
   }, [currentAttempt, examCompleted]);
 
-  // Start attempt on mount
   useEffect(() => {
     if (course && user && !currentAttempt) {
       dispatch(
@@ -179,13 +172,11 @@ const ExamPage = () => {
     }
   }, [course, user, currentAttempt, dispatch, allQuestions.length]);
 
-  // Timer countdown - FIXED: Use correct function name
   useEffect(() => {
     if (examCompleted) return;
 
     if (timeRemaining <= 0) {
-      handleSubmitExam(violations, false); // FIXED: Removed typo
-      return;
+      handleSubmitExam(violations, false); 
     }
 
     const timer = setInterval(() => {
@@ -238,7 +229,6 @@ const ExamPage = () => {
     }
   };
 
-  // Show proctoring modal first
   if (showProctoringModal) {
     return (
       <ProctoringModal
@@ -248,7 +238,6 @@ const ExamPage = () => {
     );
   }
 
-  // If exam is completed, show success screen
   if (examCompleted) {
     return (
       <div className="min-h-screen bg-gray-50 flex items-center justify-center">
@@ -277,7 +266,6 @@ const ExamPage = () => {
     );
   }
 
-  // Loading state
   if (!course || !currentQuestion) {
     return (
       <div className="min-h-screen bg-gray-50 flex items-center justify-center">

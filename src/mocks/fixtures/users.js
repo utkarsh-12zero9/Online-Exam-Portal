@@ -51,5 +51,4 @@ export const mockUsers = [
   },
 ];
 
-// For backward compatibility
 export const users = mockUsers;

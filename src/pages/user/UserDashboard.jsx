@@ -11,17 +11,14 @@ const UserDashboardPage = () => {
     const courses = useSelector((state) => state.courses.courses);
     const enrollments = useSelector((state) => state.enrollments.enrollments);
 
-    // Get user's enrollments
     const myEnrollments = enrollments.filter((e) => e.userId === user?.id);
 
-    // Calculate stats
     const totalEnrolled = myEnrollments.length;
     const totalAttempts = myEnrollments.reduce(
         (sum, e) => sum + e.attempts.length,
         0
     );
 
-    // Calculate average score
     let totalScore = 0;
     let totalMarks = 0;
     myEnrollments.forEach((enrollment) => {
@@ -33,12 +30,10 @@ const UserDashboardPage = () => {
     const avgPercentage =
         totalMarks > 0 ? ((totalScore / totalMarks) * 100).toFixed(1) : 0;
 
-    // Get recent enrollments (last 3)
     const recentEnrollments = [...myEnrollments]
         .sort((a, b) => new Date(b.enrolledAt) - new Date(a.enrolledAt))
         .slice(0, 3);
 
-    // Get recent attempts (last 5)
     const recentAttempts = [];
     myEnrollments.forEach((enrollment) => {
         enrollment.attempts.forEach((attempt) => {
@@ -54,13 +49,11 @@ const UserDashboardPage = () => {
     );
     const lastAttempts = recentAttempts.slice(0, 5);
 
-    // Get best score
     const bestScore = recentAttempts.reduce((max, attempt) => {
         const percentage = (attempt.score / attempt.totalMarks) * 100;
         return percentage > max ? percentage : max;
     }, 0);
 
-    // Available courses to enroll
     const availableCourses = courses.filter(
         (course) => !myEnrollments.some((e) => e.courseId === course.id)
     );

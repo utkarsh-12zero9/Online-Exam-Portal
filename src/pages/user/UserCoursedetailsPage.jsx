@@ -35,12 +35,10 @@ const UserCourseDetailsPage = () => {
   const course = courses.find((c) => c.id === Number(id));
   const courseModules = modules.filter((m) => m.courseId === Number(id));
 
-  // Check if already enrolled
   const isEnrolled = enrollments.some(
     (e) => e.userId === user?.id && e.courseId === Number(id)
   );
 
-  // Calculate total questions
   const totalQuestions = courseModules.reduce((sum, mod) => {
     const modQuestions = questions.filter((q) => q.moduleId === mod.id);
     return sum + modQuestions.length;

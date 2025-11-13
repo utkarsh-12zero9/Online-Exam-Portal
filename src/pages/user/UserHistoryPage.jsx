@@ -22,10 +22,8 @@ const UserHistoryPage = () => {
     const enrollments = useSelector((state) => state.enrollments.enrollments);
     const courses = useSelector((state) => state.courses.courses);
 
-    // Get all attempts for current user
     const userEnrollments = enrollments.filter((e) => e.userId === user?.id);
 
-    // Flatten all attempts with course info
     const allAttempts = userEnrollments.flatMap((enrollment) => {
         const course = courses.find((c) => c.id === enrollment.courseId);
         return (enrollment.attempts || []).map((attempt) => ({
@@ -35,7 +33,6 @@ const UserHistoryPage = () => {
         }));
     });
 
-    // Sort by date (most recent first)
     const sortedAttempts = allAttempts.sort(
         (a, b) => new Date(b.submittedAt) - new Date(a.submittedAt)
     );

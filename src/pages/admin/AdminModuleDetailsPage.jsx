@@ -49,7 +49,7 @@ const AdminModuleDetailsPage = () => {
         if (question) {
             setForm({
                 ...question,
-                options: question.options || ['', '', '', ''], // Default if missing
+                options: question.options || ['', '', '', ''], 
             });
         } else {
             setForm({
@@ -76,7 +76,6 @@ const AdminModuleDetailsPage = () => {
     const handleChange = (e) => {
         const { name, value } = e.target;
 
-        // If changing question type, reset options/correctAnswer appropriately
         if (name === 'type') {
             if (value === 'mcq') {
                 setForm((f) => ({

@@ -29,7 +29,6 @@ const AdminStudentDetailsPage = () => {
     );
   }
 
-  // Calculate stats
   const totalAttempts = studentEnrollments.reduce((sum, e) => sum + e.attempts.length, 0);
   let totalScore = 0;
   let totalMarks = 0;

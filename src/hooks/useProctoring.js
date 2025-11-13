@@ -8,7 +8,6 @@ export const useProctoring = (onViolation, isActive = true) => {
   const maxViolations = 3;
   const lastViolationTime = useRef(0);
 
-  // Add violation with auto-submit
   const addViolation = useCallback((type, description) => {
     if (!isActive) return;
 
@@ -22,22 +21,19 @@ export const useProctoring = (onViolation, isActive = true) => {
       timestamp: new Date().toISOString(),
     };
 
-    // Update violations array
     setViolations((prev) => {
       const newViolations = [...prev, violation];
       violationCountRef.current = newViolations.length;
 
-      console.log('Violation added:', violation); // DEBUG
-      console.log('Total violations:', violationCountRef.current); // DEBUG
+      console.log('Violation added:', violation); 
+      console.log('Total violations:', violationCountRef.current); 
 
       toast.error(`⚠️ Violation #${violationCountRef.current}: ${description}`);
 
-      // Check if max violations reached
       if (violationCountRef.current >= maxViolations) {
-        console.log('MAX VIOLATIONS REACHED - Auto-submitting'); // DEBUG
+        console.log('MAX VIOLATIONS REACHED - Auto-submitting');
         toast.error('Maximum violations reached! Auto-submitting exam...');
         
-        // Call onViolation callback with delay
         setTimeout(() => {
           if (onViolation) {
             onViolation(newViolations);
@@ -55,7 +51,6 @@ export const useProctoring = (onViolation, isActive = true) => {
     });
   }, [isActive, maxViolations, onViolation]);
 
-  // Enhanced Tab visibility detection (Method 1)
   useEffect(() => {
     if (!isActive) return;
 
@@ -69,7 +64,6 @@ export const useProctoring = (onViolation, isActive = true) => {
     return () => document.removeEventListener('visibilitychange', handleVisibilityChange);
   }, [isActive, addViolation]);
 
-  // Window blur detection (Method 2 - catches Alt+Tab, minimize)
   useEffect(() => {
     if (!isActive) return;
 
@@ -81,12 +75,10 @@ export const useProctoring = (onViolation, isActive = true) => {
     return () => window.removeEventListener('blur', handleBlur);
   }, [isActive, addViolation]);
 
-  // Page focus detection (Method 3 - additional check)
   useEffect(() => {
     if (!isActive) return;
 
     const handleFocus = () => {
-      // When user comes back, check if they were away
       if (document.hidden) {
         addViolation('tab_return', 'Returned to tab after switching away');
       }
@@ -96,12 +88,10 @@ export const useProctoring = (onViolation, isActive = true) => {
     return () => window.removeEventListener('focus', handleFocus);
   }, [isActive, addViolation]);
 
-  // Mouse leave detection (Method 4 - when mouse leaves browser window)
   useEffect(() => {
     if (!isActive) return;
 
     const handleMouseLeave = (e) => {
-      // Check if mouse left the viewport
       if (e.clientY <= 0 || e.clientX <= 0 || 
           e.clientX >= window.innerWidth || 
           e.clientY >= window.innerHeight) {
@@ -113,7 +103,6 @@ export const useProctoring = (onViolation, isActive = true) => {
     return () => document.removeEventListener('mouseleave', handleMouseLeave);
   }, [isActive, addViolation]);
 
-  // Fullscreen detection
   useEffect(() => {
     if (!isActive) return;
 
@@ -145,7 +134,6 @@ export const useProctoring = (onViolation, isActive = true) => {
     };
   }, [isActive, addViolation]);
 
-  // Prevent copy/paste/cut
   useEffect(() => {
     if (!isActive) return;
 
@@ -170,7 +158,6 @@ export const useProctoring = (onViolation, isActive = true) => {
     };
   }, [isActive]);
 
-  // Prevent right-click
   useEffect(() => {
     if (!isActive) return;
 
@@ -183,17 +170,16 @@ export const useProctoring = (onViolation, isActive = true) => {
     return () => document.removeEventListener('contextmenu', preventContextMenu);
   }, [isActive]);
 
-  // Prevent keyboard shortcuts (F12, Ctrl+Shift+I, etc.)
   useEffect(() => {
     if (!isActive) return;
 
     const preventDevTools = (e) => {
-      // F12, Ctrl+Shift+I, Ctrl+Shift+J, Ctrl+U, Ctrl+S
+  
       if (
-        e.keyCode === 123 || // F12
-        (e.ctrlKey && e.shiftKey && (e.keyCode === 73 || e.keyCode === 74)) || // Ctrl+Shift+I/J
-        (e.ctrlKey && e.keyCode === 85) || // Ctrl+U
-        (e.ctrlKey && e.keyCode === 83) // Ctrl+S
+        e.keyCode === 123 ||
+        (e.ctrlKey && e.shiftKey && (e.keyCode === 73 || e.keyCode === 74)) ||
+        (e.ctrlKey && e.keyCode === 85) ||
+        (e.ctrlKey && e.keyCode === 83)
       ) {
         e.preventDefault();
         toast.warning('This keyboard shortcut is disabled during the exam');
@@ -204,7 +190,6 @@ export const useProctoring = (onViolation, isActive = true) => {
     return () => document.removeEventListener('keydown', preventDevTools);
   }, [isActive]);
 
-  // Request fullscreen
   const requestFullscreen = useCallback(() => {
     const elem = document.documentElement;
 
@@ -219,7 +204,6 @@ export const useProctoring = (onViolation, isActive = true) => {
     }
   }, []);
 
-  // Exit fullscreen
   const exitFullscreen = useCallback(() => {
     if (document.exitFullscreen) {
       document.exitFullscreen();
