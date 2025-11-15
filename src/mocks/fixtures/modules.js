@@ -5,7 +5,7 @@ export const mockModules = [
     title: 'Introduction to React',
     order: 1,
     description: 'Understand React basics and JSX',
-    questionCount: 8,
+    questionCount: 3,
   },
   {
     id: 2,
@@ -13,7 +13,7 @@ export const mockModules = [
     title: 'React Hooks',
     order: 2,
     description: 'Master useState, useEffect, and custom hooks',
-    questionCount: 10,
+    questionCount: 2,
   },
   {
     id: 3,
@@ -21,7 +21,7 @@ export const mockModules = [
     title: 'State Management',
     order: 3,
     description: 'Learn Redux and Context API',
-    questionCount: 7,
+    questionCount: 1,
   },
   
   {

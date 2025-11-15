@@ -92,20 +92,26 @@ const AdminCourseDetailsPage = () => {
                 {/* Header Section */}
                 <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4 mb-8">
                     <div>
-                        <div className="flex items-center gap-2 mb-2">
+                        <div className=" items-center gap-2 mb-2">
                             <button
-                                onClick={() => navigate('/admin/courses')}
-                                className="text-gray-400 hover:text-gray-600 transition-colors"
+                                onClick={() => navigate(`/admin/courses`)}
+                                className="inline-flex items-center gap-2 text-gray-600 hover:text-gray-900 transition-colors group mb-6"
                             >
-                                <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <svg
+                                    className="w-5 h-5 transition-transform group-hover:-translate-x-1"
+                                    fill="none"
+                                    stroke="currentColor"
+                                    viewBox="0 0 24 24"
+                                >
                                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 19l-7-7 7-7" />
                                 </svg>
+                                <span className="text-sm font-medium">Back to Courses</span>
                             </button>
                             <h1 className="text-2xl sm:text-3xl font-bold text-gray-900 tracking-tight">
                                 {course?.title}
                             </h1>
                         </div>
-                        <p className="text-sm sm:text-base text-gray-600 ml-7">
+                        <p className="text-sm sm:text-base text-gray-600">
                             Manage course modules and learning content
                         </p>
                     </div>

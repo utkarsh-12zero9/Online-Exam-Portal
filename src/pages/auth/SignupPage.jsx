@@ -48,7 +48,7 @@ const SignupPage = () => {
 
       localStorage.setItem('authToken', 'mock-token-123');
       localStorage.setItem('user', JSON.stringify(mockUser));
-      
+
       dispatch(loginSuccess(mockUser));
       toast.success('Account created successfully!');
       setLoading(false);
@@ -63,7 +63,7 @@ const SignupPage = () => {
         {/* Decorative Elements */}
         <div className="absolute top-20 left-20 w-64 h-64 bg-blue-400 rounded-full opacity-20"></div>
         <div className="absolute bottom-20 right-20 w-96 h-96 bg-blue-600 rounded-full opacity-20"></div>
-        
+
         {/* Content */}
         <div className="relative z-10">
           <div className="flex items-center gap-3 mb-16">
@@ -78,7 +78,7 @@ const SignupPage = () => {
               Start Your Learning Journey
             </h1>
             <p className="text-blue-100 text-lg leading-relaxed">
-              Join thousands of learners already using ExamPortal. Create your account today 
+              Join thousands of learners already using ExamPortal. Create your account today
               and get access to world-class courses, practice tests, and certification programs.
             </p>
           </div>
@@ -119,7 +119,7 @@ const SignupPage = () => {
           {/* Mobile Logo */}
           <div className="lg:hidden flex justify-center mb-8">
             <div className="w-16 h-16 bg-blue-500 rounded-2xl flex items-center justify-center">
-              <span className="text-white font-bold text-2xl"><Newspaper className="size-8"/></span>
+              <span className="text-white font-bold text-2xl"><Newspaper className="size-8" /></span>
             </div>
           </div>
 

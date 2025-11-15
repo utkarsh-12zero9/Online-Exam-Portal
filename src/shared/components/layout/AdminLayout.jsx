@@ -37,14 +37,12 @@ const AdminLayout = ({ children }) => {
   const dispatch = useDispatch();
   const profileMenuRef = useRef(null);
 
-  // --- Logic (Unchanged) ---
   const handleLogout = () => {
     dispatch(logout());
     toast.success("Logged out successfully");
     navigate("/login");
   };
 
-  // --- Hook for closing profile dropdown on outside click ---
   useEffect(() => {
     const handleClickOutside = (event) => {
       if (
@@ -125,13 +123,12 @@ const AdminLayout = ({ children }) => {
           })}
         </nav>
 
-        {/* --- ADDED SECTION --- */}
         {/* Mobile Logout Button (at bottom) */}
         <div className="p-4 border-t border-blue-500 lg:hidden">
           <button
             onClick={() => {
               handleLogout();
-              setIsSidebarOpen(false); // Close sidebar on logout
+              setIsSidebarOpen(false);
             }}
             className="w-full flex items-center justify-center gap-3 px-4 py-3 rounded-lg text-sm bg-red-500 text-white hover:bg-red-600 transition-colors"
           >
@@ -139,7 +136,6 @@ const AdminLayout = ({ children }) => {
             <span>Logout</span>
           </button>
         </div>
-        {/* --- END ADDED SECTION --- */}
       </aside>
 
       {/* Main Content */}

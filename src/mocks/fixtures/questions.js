@@ -44,4 +44,49 @@ export const mockQuestions = [
     marks: 1,
     difficulty: 'easy',
   },
+  {
+    id: 4,
+    moduleId: 2,
+    type: 'mcq',
+    question: 'Which hook is used for side effects in React?',
+    options: [
+      'useState',
+      'useEffect',
+      'useContext',
+      'useReducer'
+    ],
+    correctAnswer: 'useEffect',
+    marks: 2,
+    difficulty: 'easy',
+  },
+  {
+    id: 5,
+    moduleId: 2,
+    type: 'mcq',
+    question: 'Which hook is used for navigation in React?',
+    options: [
+      'useNavigate',
+      'useEffect',
+      'useContext',
+      'useReducer'
+    ],
+    correctAnswer: 'useNavigate',
+    marks: 2,
+    difficulty: 'easy',
+  },
+  {
+    id: 6,
+    moduleId: 3,
+    type: 'mcq',
+    question: 'Which hook is used for state management in React?',
+    options: [
+      'useState',
+      'useEffect',
+      'useContext',
+      'useReducer'
+    ],
+    correctAnswer: 'useReducer',
+    marks: 3,
+    difficulty: 'easy',
+  },
 ];

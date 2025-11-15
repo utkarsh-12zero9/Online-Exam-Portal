@@ -169,13 +169,17 @@ const UserLayout = ({ children }) => {
         <header className="bg-white shadow-sm sticky top-0 z-30">
           <div className="flex items-center justify-between px-4 sm:px-6 py-3">
             {/* Mobile Menu Button */}
-            <button
-              className="sm:hidden text-gray-600 hover:text-gray-900"
-              onClick={() => setSidebarOpen(!sidebarOpen)}
-              aria-label="Open Sidebar"
-            >
-              <HiOutlineMenu className="w-6 h-6" />
-            </button>
+            <div className="flex items-center gap-4">
+              <button
+                onClick={() => setIsSidebarOpen(true)}
+                className="lg:hidden text-gray-600 hover:text-gray-900"
+              >
+                <HiOutlineMenu className="w-6 h-6" />
+              </button>
+              <h1 className="text-xl sm:text-2xl font-bold text-gray-900">
+                User Dashboard
+              </h1>
+            </div>
 
             {/* Spacer for desktop */}
             <div className="hidden sm:block flex-1"></div>

@@ -33,6 +33,7 @@ export const mockEnrollments = [
             },
         ],
     },
+    
     {
         id: 2,
         userId: 2,
@@ -53,6 +54,7 @@ export const mockEnrollments = [
             },
         ],
     },
+
     {
         id: 3,
         userId: 3,

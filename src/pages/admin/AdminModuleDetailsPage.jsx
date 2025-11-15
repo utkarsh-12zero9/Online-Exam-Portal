@@ -49,7 +49,7 @@ const AdminModuleDetailsPage = () => {
         if (question) {
             setForm({
                 ...question,
-                options: question.options || ['', '', '', ''], 
+                options: question.options || ['', '', '', ''],
             });
         } else {
             setForm({
@@ -126,9 +126,20 @@ const AdminModuleDetailsPage = () => {
         <AdminLayout>
             <div>
                 <div className="flex items-center gap-2 mb-6">
-                    <Button variant="outline" size="sm" onClick={() => navigate(`/admin/courses/${courseId}`)}>
-                        ← Back to Modules
-                    </Button>
+                    <button
+                        onClick={() => navigate(`/admin/courses/${courseId}`)}
+                        className="inline-flex items-center gap-2 text-gray-600 hover:text-gray-900 transition-colors group mb-6"
+                    >
+                        <svg
+                            className="w-5 h-5 transition-transform group-hover:-translate-x-1"
+                            fill="none"
+                            stroke="currentColor"
+                            viewBox="0 0 24 24"
+                        >
+                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 19l-7-7 7-7" />
+                        </svg>
+                        <span className="text-sm font-medium">Back to Modules</span>
+                    </button>
                 </div>
 
                 <h1 className="text-3xl font-bold mb-2">{module?.title}</h1>
@@ -149,10 +160,10 @@ const AdminModuleDetailsPage = () => {
                                     </span>
                                     <span
                                         className={`px-2 py-1 rounded text-xs font-semibold ${q.difficulty === 'easy'
-                                                ? 'bg-emerald-100 text-emerald-700'
-                                                : q.difficulty === 'medium'
-                                                    ? 'bg-yellow-100 text-yellow-700'
-                                                    : 'bg-red-100 text-red-700'
+                                            ? 'bg-emerald-100 text-emerald-700'
+                                            : q.difficulty === 'medium'
+                                                ? 'bg-yellow-100 text-yellow-700'
+                                                : 'bg-red-100 text-red-700'
                                             }`}
                                     >
                                         {q.difficulty}
